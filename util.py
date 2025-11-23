@@ -69,11 +69,11 @@ file_to_component = {
     "proc.c": "fair",
 
     # Scheduling Policy: PELT
-    "pelt.c": "load est.",
-    "pelt.h": "load est.",
-    "loadavg.c": "load est.",
-    "sched-pelt.c": "load est.",
-    "sched-pelt.h": "load est.",
+    "pelt.c": "core",
+    "pelt.h": "core",
+    "loadavg.c": "core",
+    "sched-pelt.c": "core",
+    "sched-pelt.h": "core",
 
     # Scheduling Policy: RT (Real Time)
     "rt.c": "rt",

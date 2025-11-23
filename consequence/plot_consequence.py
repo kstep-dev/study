@@ -11,21 +11,21 @@ from util import get_components
 
 # Map consequence descriptions to their normalized group names
 CONSEQUENCE_TO_GROUP = {
-    'Crash': 'Func.', 
-    'lockup / hang': 'Func.', 
+    'Crash': 'FailStop', 
+    'lockup / hang': 'FailStop', 
     'Memory Leak': 'NoImpact', 
     'security vulnerability': 'Security',
-    'data corruption': 'Func.',
-    'Functionality (CFS bandwidth)': 'Func.',
-    'Functionality (Deadline enforce / admission control)': 'Func.',
-    'Functionality (Trace or account)': 'Func.',
-    'Functionality (config / feature not enabled/disabled)': 'Func.',
-    'Functionality (cpu allowed, or cpuiso)': 'Func.',
-    'Functionality (hotplug)': 'Func.',
-    'Functionality (property change fail)': 'Func.',
-    'Functionality (response error)': 'Func.',
-    'Functionality (starvation)': 'Func.',
-    'Functionality (task state change failure)': 'Func.',
+    'data corruption': 'SilentFunc.',
+    'Functionality (CFS bandwidth)': 'SilentFunc.',
+    'Functionality (Deadline enforce / admission control)': 'SilentFunc.',
+    'Functionality (Trace or account)': 'SilentFunc.',
+    'Functionality (config / feature not enabled/disabled)': 'SilentFunc.',
+    'Functionality (cpu allowed, or cpuiso)': 'SilentFunc.',
+    'Functionality (hotplug)': 'SilentFunc.',
+    'Functionality (property change fail)': 'SilentFunc.',
+    'Functionality (response error)': 'SilentFunc.',
+    'Functionality (starvation)': 'SilentFunc.',
+    'Functionality (task state change failure)': 'SilentFunc.',
     'Performance (Policy violation, balance, work conserving)': 'Policy',
     'Performance (Policy violation, cpufreq control)': 'Policy',
     'Performance (Policy violation, fairness)': 'Policy',
@@ -41,10 +41,11 @@ CONSEQUENCE_TO_GROUP = {
 }
 
 GROUP_TO_IDX = {
-    'Func.': 0,
-    'Policy': 1,
-    'NoImpact': 2,
-    'Security': 3,
+    'FailStop': 0,
+    'SilentFunc.': 1,
+    'Policy': 2,
+    'NoImpact': 3,
+    'Security': 4,
 }
 
 ObservedWarnings = {

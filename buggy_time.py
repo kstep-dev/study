@@ -1,6 +1,5 @@
 from typing import Any
 
-
 import util
 
 import csv
@@ -16,12 +15,24 @@ import numpy as np
 
 from collections import defaultdict
 
-foundation_components = ["core", "clock", "topology",  "accounting"]
-policy_components = ["pelt", "fair", "rt", "deadline"]
+foundation_components = ["core", "topology",  "accounting"]
+policy_components = ["fair", "rt", "deadline"]
+
+diff_dict = {
+    "core": [],
+    # "clock": [],
+    "topology": [],
+    "accounting": [],
+    # "load est.": [],
+    "fair": [],
+    "rt": [],
+    "deadline": [],
+}
 
 # Dictionary to hold diffs per component
 diffs_foundation = []
 diffs_policy = []
+diff_commits = []
 with open(fixes_file, newline='', encoding="utf-8") as f:
     reader = csv.DictReader(f)
     for row in reader:
@@ -36,39 +47,47 @@ with open(fixes_file, newline='', encoding="utf-8") as f:
         if row["buggy_tag"]:
             buggy_tag = row["buggy_sha"]
             diff = util.get_date_diff(buggy_tag, commit)
-            if any(x in components for x in foundation_components):
-                diffs_foundation.append(diff.days)
-            if any(x in components for x in policy_components):
-                diffs_policy.append(diff.days)
+            for component in components:
+                diff_dict[component].append(diff.days)
 
-# Prepare the plot
-plt.figure(figsize=(4.5,1.4))
-colors = plt.cm.tab10.colors
-print(len(diffs_foundation))
-print(len(diffs_policy))
-plt.plot(sorted(diffs_foundation), [i / len(diffs_foundation) * 100 for i in range(len(diffs_foundation))], 
-        label="Scheduler Foundation", linestyle="--",
-        color="#31326F")
-plt.plot(sorted(diffs_policy), [i / len(diffs_policy) * 100 for i in range(len(diffs_policy))], 
-        label="Scheduling Policy", 
-        color="#4FB7B3")
-plt.legend()
+fig, axes = plt.subplots(1, 2, figsize=(4.5, 1.8), sharex=True, sharey=True)
+colors = plt.cm.tab20.colors
 
-# plt.xscale('log')
-plt.yticks([0, 25, 50, 75, 100])
-plt.ylim(0, 105)
-plt.xlim(0, 6000)
-plt.legend(loc="upper left")
-plt.xscale('log')
-plt.xlim(1, 10000)  # set xlim so that log scale works (no 0)
+foundation = ["core", "topology", "accounting"]
+policy = ["fair", "rt", "deadline"]
 
-plt.xlabel("Bug lifetime (days)")
-plt.ylabel("Percent of bugs")
-plt.grid(True, linestyle='--', alpha=0.5)
-plt.tight_layout(pad = 0)
+ax0 = axes[0]
+for idx, component in enumerate(foundation):
+    data = sorted(diff_dict[component])
+    if data:
+        y_vals = [i / len(data) * 100 for i in range(len(data))]
+        ax0.plot(data, y_vals, label=component, color=colors[idx])
+ax0.set_title("Scheduler Framework")
+ax0.set_xlim(1, 7000)
+ax0.set_ylim(0, 105)
+ax0.set_ylabel("Percent of bugs")
+ax0.set_xlabel("Bug lifetime (days)")
+ax0.set_xscale('log')
+ax0.set_yticks([0, 50, 100])
+ax0.grid(True, linestyle='--', alpha=0.5)
+ax0.legend(loc='upper left', frameon=False, borderpad=0.2)
+
+ax1 = axes[1]
+for idx, component in enumerate(policy):
+    data = sorted(diff_dict[component])
+    if data:
+        y_vals = [i / (len(data) - 1) * 100 for i in range(len(data))]
+        ax1.plot(data, y_vals, label=component, color=colors[idx+len(foundation)])
+ax1.set_title("Scheduler Classes")
+ax1.set_xlim(1, 7000)
+ax1.set_ylim(0, 105)
+ax1.set_xlabel("Bug lifetime (days)")
+ax1.set_xscale('log')
+ax1.set_yticks([0, 50, 100])
+ax1.grid(True, linestyle='--', alpha=0.5)
+ax1.legend(loc='upper left', frameon=False, borderpad=0.2)
+ax1.set_yticklabels([])
+
+plt.tight_layout(pad=1)
 plt.savefig("buggy_time.pdf")
-
-
-
-
 
