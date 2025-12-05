@@ -138,6 +138,17 @@ for i, h in enumerate(commit_hashes):
 for component in component_to_hash:
     component_to_hash[component].sort(key=lambda h: (hash_to_severity[h], hash_to_warning[h]))
 
+# Count commits per severity per component
+component_severity_counts = {}
+for comp_idx, hashes in component_to_hash.items():
+    severity_counts = {}
+    for h in hashes:
+        severity = hash_to_severity[h]
+        if severity not in severity_counts:
+            severity_counts[severity] = 0
+        severity_counts[severity] += 1
+    component_severity_counts[comp_idx] = severity_counts
+
 # --- Build Matrix (rows: groups, columns: commits per component) ---
 num_cols = sum(len(hashes) for hashes in component_to_hash.values())
 matrix = np.zeros((len(groupnames), num_cols), dtype=int)
@@ -169,26 +180,56 @@ custom_colors = [
 
 # --- Plotting ---
 
-plt.figure(figsize=(10, 1.4))
+plt.figure(figsize=(10, 1.2))
 im = plt.imshow(matrix, aspect='auto', interpolation='nearest', cmap=ListedColormap(custom_colors))
 
+
 # Draw component boundaries and labels
-offset = [0.5, 10, -5, 0.5, 10, 3, 0.5]
+offset = [0.5, 10, -5, 0.5, 0, 0, 0.5]
+original_ylim = plt.ylim()
+plt.plot([0 - 0.5, 0 - 0.5], [-0.5, -1], color='black', linewidth=1, clip_on=False)
+plt.ylim(original_ylim)
 for i, boundary in enumerate(component_boundaries):
-    plt.axvline(x=boundary - 0.5, color='black', linestyle='--', linewidth=1)
+    # Draw a small vertical line at the top
+    plt.axvline(x=boundary - 0.5, color='black', linewidth=1, clip_on=False)
+    original_ylim = plt.ylim()
+    plt.plot([boundary - 0.5, boundary - 0.5], [-0.5, -0.8], color='black', linewidth=1, clip_on=False)
+    plt.ylim(original_ylim)
     last_boundary = component_boundaries[i-1] if i > 0 else 0
     label_pos = (boundary + last_boundary) / 2 - offset[i]
     # y_offset = -1 if i in (2, 6) else 0.1
-    plt.text(label_pos, -1, COMPONENTS[i], ha='center', va='center')
+    plt.text(label_pos, -1.2, COMPONENTS[i], ha='center', va='center')
 
-plt.xlabel("Commits (group by component)")
+plt.plot([0-0.5,boundary-0.5], [-0.75, -0.75], color='black', linewidth=1, clip_on=False)
+
+# Add severity count annotations for each component
+severity_id_to_name = {v: k for k, v in GROUP_TO_IDX.items()}
+for comp_idx, severity_counts in component_severity_counts.items():
+    start_pos = component_boundaries[comp_idx - 1] if comp_idx > 0 else 0
+    end_pos = component_boundaries[comp_idx]
+    
+    # Track position within component for each severity
+    current_pos = start_pos
+    for severity_id in sorted(severity_counts.keys()):
+        count = severity_counts[severity_id]
+        severity_name = severity_id_to_name[severity_id]
+        severity_row = GROUP_TO_IDX[severity_name]
+        
+        # Position text at the center of this severity group
+        center_x = current_pos + count / 2
+        
+        # Add text annotation on the matrix
+        if count > 5:  # Only show if there's enough space
+            plt.text(center_x, severity_row, str(count), 
+                    ha='center', va='center', fontsize=10, 
+                    color='white', weight='bold')
+        
+        current_pos += count
+
+plt.xlabel("Commits (group by component)", labelpad=1)
 plt.yticks(np.arange(len(groupnames)), groupnames, rotation=0)
-plt.xticks(
-    np.arange(0, matrix.shape[1], 30),
-    labels=[str(i) for i in np.arange(0, matrix.shape[1], 30)]
-)
 
-import matplotlib as mpl
+plt.tick_params(which='both', length=2)
 
 # Add a colorbar (colormap) to show color meaning
 cbar = plt.colorbar(
@@ -215,5 +256,5 @@ for pos, label in zip(positions, labels):
         transform=cbar.ax.transData
     )
 
-plt.tight_layout(pad=0.1)
+plt.tight_layout(pad=0.)
 plt.savefig("consequence.pdf")
