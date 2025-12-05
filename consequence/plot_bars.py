@@ -13,13 +13,13 @@ from util import get_components
 CONSEQUENCE_TO_GROUP_FUNC = {
     'Crash': 'Crash/Hang', 
     'lockup / hang': 'Crash/Hang', 
-    'Functionality (CFS bandwidth)': 'CFS BW Vio.',
-    'Functionality (Deadline enforce / admission control)': 'Deadline Vio.',
+    'Functionality (CFS bandwidth)': 'Interface Vio.',
+    'Functionality (Deadline enforce / admission control)': 'Interface Vio.',
     'Functionality (Trace or account)': 'Trace Err.',
     'Functionality (config / feature not enabled/disabled)': 'Config Vio.',
-    'Functionality (cpu allowed, or cpuiso)': 'Affinity Vio.',
+    'Functionality (cpu allowed, or cpuiso)': 'Interface Vio.',
     'Functionality (hotplug)': 'Hotplug Fail',
-    'Functionality (property change fail)': 'Property Err.',
+    'Functionality (property change fail)': 'Interface Vio.',
     'Functionality (response error)': 'Return Val Err.',
     'Functionality (starvation)': 'Starvation',
     'Functionality (task state change failure)': 'Task State Err.',
@@ -28,15 +28,14 @@ CONSEQUENCE_TO_GROUP_FUNC = {
 GROUP_TO_IDX_FUNC = {
     'Crash/Hang': 0,
     'Starvation': 1,
-    'Deadline Vio.': 2,
-    'CFS BW Vio.': 3,
-    'Config Vio.': 4,
-    'Affinity Vio.': 5,
-    'Hotplug Fail': 6,
-    'Task State Err.': 7,
-    'Property Err.': 8,
-    'Return Val Err.': 9,
-    'Trace Err.': 10,
+    'Interface Vio.': 2,
+    # 'CFS BW Vio.': 3,
+    'Config Vio.': 3,
+    # 'Affinity Vio.': 5,
+    'Hotplug Fail': 4,
+    'Task State Err.': 5,
+    'Return Val Err.': 6,
+    'Trace Err.': 7,
 }
 
 # Map consequence descriptions for policy
@@ -171,12 +170,11 @@ def plot_stacked_bars(ax, sorted_group_warning_counts, sorted_groupnames, title)
                 bottom[j] += count
     
     ax.set_xticks(range(len(sorted_groupnames)))
-    ax.set_xticklabels(sorted_groupnames, rotation=90, ha='right')
-    ax.set_ylabel("Number of Bugs")
-    ax.set_title(title)
-    if title == "Functionality Bugs":
-        ax.set_ylabel("Number of Bugs")
-        ax.legend(ncol=2, handletextpad=0.7, columnspacing=0.5, borderpad=0.4)
+    ax.set_xticklabels(sorted_groupnames, rotation=40, ha='right')
+    ax.set_title(title, fontsize=10)
+    if title == "(a) Functionality Bugs":
+        ax.set_ylabel("#Bugs")
+        # ax.legend(ncol=2, handletextpad=0.7, columnspacing=0.5, borderpad=0.4)
     else:
         ax.set_ylabel("")
         ax.set_yticks([])
@@ -219,17 +217,17 @@ width_ratios = [left_ratio, right_ratio]
 
 fig, (ax1, ax2) = plt.subplots(
     1, 2,
-    figsize=((2.5 + 0.45*n_func + 1.7) * 0.52, 2.2),  # width heuristic but mostly flexible
-    gridspec_kw={'width_ratios': width_ratios}
+    figsize=(5, 0.8),  # Reduced height from 1.7 to 1.4
+    gridspec_kw={'wspace': 0.05, 'width_ratios': width_ratios}  # Remove space between subplots
 )
 
 # Plot functionality
-plot_stacked_bars(ax1, sorted_counts_func, sorted_names_func, "Functionality Bugs")
+plot_stacked_bars(ax1, sorted_counts_func, sorted_names_func, "(a) Functionality Bugs")
 
 # Plot policy
-plot_stacked_bars(ax2, sorted_counts_policy, sorted_names_policy, "Policy Bugs")
+plot_stacked_bars(ax2, sorted_counts_policy, sorted_names_policy, "(b) Policy Bugs")
 
-plt.tight_layout(pad = 0)
-plt.savefig("functionality_policy.pdf")
+plt.tight_layout(pad=0.)
+plt.savefig("functionality_policy.pdf", bbox_inches='tight', pad_inches=0.01)
 print("Saved combined plot to functionality_policy.pdf")
 
