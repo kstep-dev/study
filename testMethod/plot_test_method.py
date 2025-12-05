@@ -4,32 +4,32 @@ from typing import Any
 import csv
 from collections import defaultdict
 CONSEQUENCE_TO_GROUP = {
-    'Crash': 'FailStop', 
-    'lockup / hang': 'FailStop', 
-    'Memory Leak': 'Policy', 
-    'security vulnerability': 'Security',
-    'data corruption': 'SilentFunc.',
-    'Functionality (CFS bandwidth)': 'SilentFunc.',
-    'Functionality (Deadline enforce / admission control)': 'SilentFunc.',
-    'Functionality (Trace or account)': 'SilentFunc.',
-    'Functionality (config / feature not enabled/disabled)': 'SilentFunc.',
-    'Functionality (cpu allowed, or cpuiso)': 'SilentFunc.',
-    'Functionality (hotplug)': 'SilentFunc.',
-    'Functionality (property change fail)': 'SilentFunc.',
-    'Functionality (response error)': 'SilentFunc.',
-    'Functionality (starvation)': 'SilentFunc.',
-    'Functionality (task state change failure)': 'SilentFunc.',
-    'Performance (Policy violation, balance, work conserving)': 'Policy',
-    'Performance (Policy violation, cpufreq control)': 'Policy',
-    'Performance (Policy violation, fairness)': 'Policy',
-    'Performance (Policy violation, impact from lower priority task)': 'Policy',
-    'Performance (Policy violation, locality)': 'Policy',
-    'Performance (Policy violation, sched overhead)': 'Policy',
-    'Performance (energy efficiency, capacity fit)': 'Policy',
-    'No impact (coding rule)': 'Policy',
-    'No impact (duplicate call)': 'Policy',
-    'No impact (self correcting)': 'Policy',
-    'No impact (unnecessary check or warning)': 'Policy',
+    'Crash': 'Func. Crash/Hang', 
+    'lockup / hang': 'Func. Crash/Hang', 
+    'Memory Leak': 'Policy. With Effect', 
+    'security vulnerability': 'Func. Non-fatal.',
+    'data corruption': 'Func. Non-fatal.',
+    'Functionality (CFS bandwidth)': 'Func. Non-fatal.',
+    'Functionality (Deadline enforce / admission control)': 'Func. Non-fatal.',
+    'Functionality (Trace or account)': 'Func. Non-fatal.',
+    'Functionality (config / feature not enabled/disabled)': 'Func. Non-fatal.',
+    'Functionality (cpu allowed, or cpuiso)': 'Func. Non-fatal.',
+    'Functionality (hotplug)': 'Func. Non-fatal.',
+    'Functionality (property change fail)': 'Func. Non-fatal.',
+    'Functionality (response error)': 'Func. Non-fatal.',
+    'Functionality (starvation)': 'Func. Non-fatal.',
+    'Functionality (task state change failure)': 'Func. Non-fatal.',
+    'Performance (Policy violation, balance, work conserving)': 'Policy. With Effect',
+    'Performance (Policy violation, cpufreq control)': 'Policy. With Effect',
+    'Performance (Policy violation, fairness)': 'Policy. With Effect',
+    'Performance (Policy violation, impact from lower priority task)': 'Policy. With Effect',
+    'Performance (Policy violation, locality)': 'Policy. With Effect',
+    'Performance (Policy violation, sched overhead)': 'Policy. With Effect',
+    'Performance (energy efficiency, capacity fit)': 'Policy. With Effect',
+    'No impact (coding rule)': 'Policy. Benign',
+    'No impact (duplicate call)': 'Policy. Benign',
+    'No impact (self correcting)': 'Policy. Benign',
+    'No impact (unnecessary check or warning)': 'Policy. Benign',
     # 'compile failure': 'Build',
 }
 
@@ -37,7 +37,7 @@ CONSEQUENCE_TO_GROUP = {
 discover_label = {
     "Benchmark/stress test regression": "Benchmark(Perf regression)",
     "Benchmark/stress test/standard test fail": "Benchmark(Warning/Crash)",
-    "Customizied test": "Customizied test cases",
+    "Customizied test": "Customized test cases",
     "Fuzz": "Fuzzing",
     "Code Review or Internal Debug": "Inspection from developer",
     "Other kernel subsystem behavior": "Other subsystem reported",
@@ -93,19 +93,20 @@ action_label = {
 }
 
 consequence_group_to_id = {
-    "FailStop": 0,
-    "SilentFunc.": 1,
-    "Policy": 2,
+    "Func. Crash/Hang": 0,
+    "Func. Non-fatal.": 1,
+    "Policy. With Effect": 2,
     # "NoImpact": 3,
-    "Security": 3,
+    "Policy. Benign": 3,
+    # "Security": 4,
 }
 
 consequence_group_to_label = {
-    "FailStop": "FailStop",
-    "SilentFunc.": "SilentFunc.",
-    "Policy": "Policy",
+    "Func. Crash/Hang": "Func. Crash/Hang",
+    "Func. Non-fatal.": "Func. Non-fatal.",
+    "Policy. With Effect": "Policy. With Effect",
     # "NoImpact": "NoImpact",
-    "Security": "Security",
+    "Policy. Benign": "Policy. Benign",
 }
 
 
@@ -133,8 +134,8 @@ def get_consequence_to_methods(csv_file="study-bug-set.csv"):
     consequence_to_methods = {}
     df = pd.read_csv(csv_file, low_memory=False)
     for _, row in df.iterrows():
-        method = str(row[1]).strip()
-        consequences_str = row[3]
+        method = str(row[2]).strip()
+        consequences_str = row[4]
         consequences = parse_consequences(consequences_str)
         for consequence in consequences:
             group = CONSEQUENCE_TO_GROUP[consequence]
@@ -157,8 +158,8 @@ def get_consequence_to_fixed_methods(csv_file="study-bug-set.csv"):
     consequence_to_fixed_methods = {}
     df = pd.read_csv(csv_file, low_memory=False)
     for _, row in df.iterrows():
-        fixed_method = str(row[2]).strip()
-        consequences_str = row[3]
+        fixed_method = str(row[3]).strip()
+        consequences_str = row[4]
         consequences = parse_consequences(consequences_str)
         for consequence in consequences:
             group = CONSEQUENCE_TO_GROUP[consequence]
@@ -188,7 +189,7 @@ import matplotlib.gridspec as gridspec
 
 def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label_to_id, return_handles_labels=False):
     """
-    Create a stacked bar chart showing percentage of each method under each consequence group.
+    Create a horizontal stacked bar chart showing percentage of each method under each consequence group.
     
     Args:
         ax: matplotlib axis object
@@ -196,8 +197,8 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
         title: title for the subplot
         return_handles_labels: if True, return (handles, labels) for legend use
     """
-    # Get sorted consequence groups
-    consequence_groups = sorted(consequence_to_methods.keys(), key=lambda x: consequence_group_to_id[x])
+    # Get sorted consequence groups (reversed for horizontal bars to show top to bottom)
+    consequence_groups = sorted(consequence_to_methods.keys(), key=lambda x: consequence_group_to_id[x], reverse=True)
     
     # Collect all unique methods across all consequence groups
     all_methods = set()
@@ -216,9 +217,9 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
             method_percentages.append(percentage)
         data.append(method_percentages)
     
-    # Create stacked bar chart
-    x = np.arange(len(consequence_groups))
-    width = 0.6
+    # Create horizontal stacked bar chart
+    y = np.arange(len(consequence_groups))
+    height = 0.6
     
     # Generate colors for each method
     if title == '(a) Manifest Methods':
@@ -226,24 +227,25 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
     else:
         colors = [action_id_to_colors[label_to_id[action]] for action in action_label_to_id.keys()]
     
-    # Plot stacked bars
-    bottom = np.zeros(len(consequence_groups))
+    # Plot horizontal stacked bars
+    left = np.zeros(len(consequence_groups))
     bars = []
     for i, (method, method_data) in enumerate(zip(all_methods, data)):
-        bar = ax.bar(x, method_data, width, label=labels[method], bottom=bottom, color=colors[i])
+        bar = ax.barh(y, method_data, height, label=labels[method], left=left, color=colors[i])
         bars.append(bar)
-        bottom += method_data
+        left += method_data
     
     # Customize plot
-    # ax.set_xlabel('Consequence Group')
-    if title == '(a) Manifest Methods':
-        ax.set_ylabel('Percentage (%)')
+    # if title != '(a) Manifest Methods':
+        # ax.set_xlabel('Percentage (%)', labelpad=1)
     ax.set_title(title, fontsize=10)
-    ax.set_xticks(x)
-    ax.set_xticklabels(consequence_groups, rotation=45, ha='right')
-    ax.set_ylim(0, 100)
+    ax.set_yticks(y)
+    ax.set_yticklabels(consequence_groups, rotation=0)
+    ax.set_xlim(0, 100)
+    ax.set_xticks([0, 20, 40, 60, 80, 100])
+    ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'])
     # Don't set legend here; will do globally
-    ax.grid(axis='y', alpha=0.3)
+    ax.grid(axis='x', alpha=0.3)
     
     if return_handles_labels:
         # Return handles and labels for legend (one bar per method)
@@ -253,25 +255,28 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
 
 # Instead of subplots, define a GridSpec for two axes and one (shared) legend panel beneath
 
-fig = plt.figure(constrained_layout=False, figsize=(5, 6))
-gs = gridspec.GridSpec(2, 2, height_ratios=[1.7, 1], hspace=0.32)
+fig = plt.figure(constrained_layout=False, figsize=(5, 4))
+gs = gridspec.GridSpec(4, 1, height_ratios=[0.8, 0.6, 0.8, 0.3], hspace=0.40)
 
 ax1 = fig.add_subplot(gs[0, 0])
-ax2 = fig.add_subplot(gs[0, 1])
-legend_ax = fig.add_subplot(gs[1, :])
-legend_ax.axis('off')  # Hide legend panel axis
+legend1_ax = fig.add_subplot(gs[1, 0])
+ax2 = fig.add_subplot(gs[2, 0])
+legend2_ax = fig.add_subplot(gs[3, 0])
+legend1_ax.axis('off')  # Hide legend panel axis
+legend2_ax.axis('off')
+
+ax1.tick_params(which='both', length=1)
+ax2.tick_params(which='both', length=1)
 
 # Plot 1: Methods (before fix)
 handles1, labels1 = plot_stacked_bar_percentage(ax1, consequence_map, '(a) Manifest Methods', discover_label, discover_label_to_id, return_handles_labels=True)
+# Legend for plot 1
+legend1 = legend1_ax.legend(handles1, labels1, loc="center left", ncol=2, frameon=False, bbox_to_anchor=(-0.15, 0.4), handletextpad=0.6, columnspacing=0.7, handlelength=1.2)
+
 # Plot 2: Fixed Methods (after fix)
 handles2, labels2 = plot_stacked_bar_percentage(ax2, consequence_fixed_map, '(b) After-fix Actions', action_label, action_label_to_id, return_handles_labels=True)
+# Legend for plot 2
+legend2 = legend2_ax.legend(handles2, labels2, loc="center left", ncol=3, frameon=False, bbox_to_anchor=(-0.05, 0.4), handletextpad=0.6, columnspacing=0.7)
 
-# Plot legends for each plot separately (do not combine)
-legend1 = legend_ax.legend(handles1, labels1, loc="lower left", ncol=1, frameon=False, bbox_to_anchor=(-0.15, -0.1))
-legend2 = legend_ax.legend(handles2, labels2, loc="lower right", ncol=1, frameon=False, bbox_to_anchor=(0.9, -0.))
-legend_ax.add_artist(legend1)  # Ensure both legends appear
-legend_ax.add_artist(legend2)
-# Optionally, shrink subplot area up a bit to make room for legend (if tight layout isn't enough)
-# plt.tight_layout(rect=[0, 0.05, 1, 1])
-plt.savefig('test_methods_comparison.pdf', dpi=300, bbox_inches='tight')
+plt.savefig('test_methods_comparison.pdf', bbox_inches='tight', pad_inches=0.0)
 plt.show()
