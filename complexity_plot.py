@@ -67,9 +67,9 @@ for i in range(len(all_components)):
 print(percentage_of_codes, percetage_of_bugs)
 
 # ==== Use gridspec to separate plot and legend ====
-fig = plt.figure(figsize=(4.3, 1.8))
+fig = plt.figure(figsize=(4.3, 1.4))
 # Use gridspec with two columns for side-by-side plots, and one small row for the legend
-gs = gridspec.GridSpec(2, 2, width_ratios=[2, 1], height_ratios=[10, 1],  bottom=0.37, wspace=0.22)
+gs = gridspec.GridSpec(2, 2, width_ratios=[2, 1], height_ratios=[10, 1],  bottom=0.33, wspace=0.3)
 
 # Bar plot (left)
 ax = fig.add_subplot(gs[0, 0])
@@ -177,17 +177,18 @@ ax_leg.legend(
     legend_handles,
     ["core", "fair", "topology", "deadline", "acct", "rt"],
     loc="center",
-    ncol=3,
+    ncol=6,
     # fontsize=7,
-    bbox_to_anchor=(0.5, -4.8),  # moved further down
+    bbox_to_anchor=(0.45, -6),  # moved further down
+    columnspacing=0.5,
 # INSERT_YOUR_CODE
-    columnspacing=0.7, handletextpad=0.6, borderpad=0.6,  # make legend patch separation smaller
+    handletextpad=0, borderpad=0,  # make legend patch separation smaller
     frameon=False,
 )
-plt.subplots_adjust(hspace=0.06, bottom=0.28)  # increased bottom margin to fit legend
+# plt.subplots_adjust(hspace=0.06, bottom=0.3)  # increased bottom margin to fit legend
 
 # INSERT_YOUR_CODE
-plt.subplots_adjust(left=0.06, right=0.98, top=0.88, bottom=0.0, hspace=0.06)  # 四周离边界的距离搞小
+plt.subplots_adjust(left=0.06, right=0.98, top=0.85, bottom=0.5) 
 
 # plt.tight_layout(pad = 0)
 plt.savefig("sched_loc_by_component.pdf")

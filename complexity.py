@@ -192,7 +192,7 @@ def count_sched_loc(linux_dir):
 
 if __name__ == "__main__":
     # Set the path of your linux/ repo (should be a local git repo)
-    LINUX_DIR = "linux"
+    LINUX_DIR = "linux_mt"
 
     data = count_sched_loc(LINUX_DIR)
     with open("sched_loc.json", "w") as f:

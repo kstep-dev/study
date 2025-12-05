@@ -11,41 +11,42 @@ from util import get_components
 
 # Map consequence descriptions to their normalized group names
 CONSEQUENCE_TO_GROUP = {
-    'Crash': 'FailStop', 
-    'lockup / hang': 'FailStop', 
-    'Memory Leak': 'NoImpact', 
-    'security vulnerability': 'Security',
-    'data corruption': 'SilentFunc.',
-    'Functionality (CFS bandwidth)': 'SilentFunc.',
-    'Functionality (Deadline enforce / admission control)': 'SilentFunc.',
-    'Functionality (Trace or account)': 'SilentFunc.',
-    'Functionality (config / feature not enabled/disabled)': 'SilentFunc.',
-    'Functionality (cpu allowed, or cpuiso)': 'SilentFunc.',
-    'Functionality (hotplug)': 'SilentFunc.',
-    'Functionality (property change fail)': 'SilentFunc.',
-    'Functionality (response error)': 'SilentFunc.',
-    'Functionality (starvation)': 'SilentFunc.',
-    'Functionality (task state change failure)': 'SilentFunc.',
-    'Performance (Policy violation, balance, work conserving)': 'Policy',
-    'Performance (Policy violation, cpufreq control)': 'Policy',
-    'Performance (Policy violation, fairness)': 'Policy',
-    'Performance (Policy violation, impact from lower priority task)': 'Policy',
-    'Performance (Policy violation, locality)': 'Policy',
-    'Performance (Policy violation, sched overhead)': 'Policy',
-    'Performance (energy efficiency, capacity fit)': 'Policy',
-    'No impact (coding rule)': 'NoImpact',
-    'No impact (duplicate call)': 'NoImpact',
-    'No impact (self correcting)': 'NoImpact',
-    'No impact (unnecessary check or warning)': 'NoImpact',
+    'Crash': 'Func. Crash/Hang', 
+    'lockup / hang': 'Func. Crash/Hang', 
+    'Memory Leak': 'Policy. Benign', 
+    'security vulnerability': 'Func. Non-fatal',
+    'data corruption': 'Func. Non-fatal',
+    'Functionality (CFS bandwidth)': 'Func. Non-fatal',
+    'Functionality (Deadline enforce / admission control)': 'Func. Non-fatal',
+    'Functionality (Trace or account)': 'Func. Non-fatal',
+    'Functionality (config / feature not enabled/disabled)': 'Func. Non-fatal',
+    'Functionality (cpu allowed, or cpuiso)': 'Func. Non-fatal',
+    'Functionality (hotplug)': 'Func. Non-fatal',
+    'Functionality (property change fail)': 'Func. Non-fatal',
+    'Functionality (response error)': 'Func. Non-fatal',
+    'Functionality (starvation)': 'Func. Non-fatal',
+    'Functionality (task state change failure)': 'Func. Non-fatal',
+    'Performance (Policy violation, balance, work conserving)': 'Policy. With Effect',
+    'Performance (Policy violation, cpufreq control)': 'Policy. With Effect',
+    'Performance (Policy violation, fairness)': 'Policy. With Effect',
+    'Performance (Policy violation, impact from lower priority task)': 'Policy. With Effect',
+    'Performance (Policy violation, locality)': 'Policy. With Effect',
+    'Performance (Policy violation, sched overhead)': 'Policy. With Effect',
+    'Performance (energy efficiency, capacity fit)': 'Policy. With Effect',
+    'No impact (coding rule)': 'Policy. Benign',
+    'No impact (duplicate call)': 'Policy. Benign',
+    'No impact (self correcting)': 'Policy. Benign',
+    'No impact (unnecessary check or warning)': 'Policy. Benign',
     # 'compile failure': 'Build',
 }
 
 GROUP_TO_IDX = {
-    'FailStop': 0,
-    'SilentFunc.': 1,
-    'Policy': 2,
-    'NoImpact': 3,
-    'Security': 4,
+    'Func. Crash/Hang': 0,
+    'Func. Non-fatal': 1,
+    'Policy. With Effect': 2,
+    'Policy. Benign': 3,
+    # 'NoImpact': 3,
+    # 'Security': 4,
 }
 
 ObservedWarnings = {
@@ -61,7 +62,7 @@ COMPONENTS = [
     "fair",
     "deadline",
     "rt",
-    "load est.",
+    # "load est.",
 ]
 COMPONENT_TO_IDX = {name: idx for idx, name in enumerate(COMPONENTS)}
 
@@ -120,6 +121,22 @@ for c in df[consequence_col]:
 
 groupnames = sorted(all_groups_set, key=lambda x: GROUP_TO_IDX[x])
 hash2idx = {h: i for i, h in enumerate(commit_hashes)}
+
+# Create a mapping from hash to its most severe consequence (lowest GROUP_TO_IDX value)
+hash_to_severity = {}
+for i, h in enumerate(commit_hashes):
+    groups = groups_per_row[i]
+    if groups:
+        min_severity = min(GROUP_TO_IDX[g] for g in groups)
+    else:
+        min_severity = 999  # No consequence, put at end
+    hash_to_severity[h] = min_severity
+
+# Sort hashes within each component by:
+# 1. Consequence severity (primary)
+# 2. Warning level (secondary) - panic/warning before silent
+for component in component_to_hash:
+    component_to_hash[component].sort(key=lambda h: (hash_to_severity[h], hash_to_warning[h]))
 
 # --- Build Matrix (rows: groups, columns: commits per component) ---
 num_cols = sum(len(hashes) for hashes in component_to_hash.values())
