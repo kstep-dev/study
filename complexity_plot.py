@@ -67,9 +67,9 @@ for i in range(len(all_components)):
 print(percentage_of_codes, percetage_of_bugs)
 
 # ==== Use gridspec to separate plot and legend ====
-fig = plt.figure(figsize=(4.3, 1.4))
+fig = plt.figure(figsize=(4.3, 1.2))
 # Use gridspec with two columns for side-by-side plots, and one small row for the legend
-gs = gridspec.GridSpec(2, 2, width_ratios=[2, 1], height_ratios=[10, 1],  bottom=0.33, wspace=0.3)
+gs = gridspec.GridSpec(2, 2, width_ratios=[2, 1], height_ratios=[11, 1],  bottom=0.33, wspace=0.2)
 
 # Bar plot (left)
 ax = fig.add_subplot(gs[0, 0])
@@ -149,6 +149,10 @@ ax_scatter.set_ylabel("% of bugs")
 ax_scatter.set_xlim(0, 0.41)
 ax_scatter.set_ylim(0, 0.41)
 ax_scatter.grid(axis="both", linestyle=":", alpha=0.4, zorder=0)
+ax_scatter.set_yticks([0, 0.1, 0.2, 0.3])
+ax_scatter.set_yticklabels([0, 10, 20, 30])
+ax_scatter.set_xticks([0, 0.1, 0.2, 0.3, 0.4])
+ax_scatter.set_xticklabels([0, 10, 20, 30, 40])
 ax_scatter.tick_params(axis='both', which='major', labelsize=8, pad=0.1)
 # ax_scatter.set_title("Component bug rate vs. code size", fontsize=10, pad=5)
 ax_scatter.xaxis.labelpad = 1.3  # Make xlabel closer

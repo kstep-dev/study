@@ -270,12 +270,12 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
     ax.set_yticks(y)
     ax.set_yticklabels(consequence_groups, rotation=0)
     ax.set_xlim(0, 100)
-    if title == '(a) Manifest Methods':
-        ax.set_xticks([])
-        # ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'])
-    else:
-        ax.set_xticks([0, 20, 40, 60, 80, 100])
-        ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'])
+    # if title == '(a) Manifest Methods':
+    ax.set_xticks([])
+    # ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'])
+    # else:
+    #     ax.set_xticks([0, 20, 40, 60, 80, 100])
+    #     ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'])
     # Don't set legend here; will do globally
     ax.grid(axis='x', alpha=0.3)
     
@@ -287,8 +287,8 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
 
 # Instead of subplots, define a GridSpec for two axes and one (shared) legend panel beneath
 
-fig = plt.figure(constrained_layout=False, figsize=(4.5, 3.5))
-gs = gridspec.GridSpec(4, 1, height_ratios=[0.8, 0.6, 0.8, 0.3], hspace=0.40)
+fig = plt.figure(constrained_layout=False, figsize=(4.5, 3.))
+gs = gridspec.GridSpec(4, 1, height_ratios=[0.8, 0.6, 0.8, 0.1], hspace=0.5)
 
 ax1 = fig.add_subplot(gs[0, 0])
 legend1_ax = fig.add_subplot(gs[1, 0])
@@ -308,7 +308,7 @@ legend1 = legend1_ax.legend(handles1, labels1, loc="center left", ncol=2, frameo
 # Plot 2: Fixed Methods (after fix)
 handles2, labels2 = plot_stacked_bar_percentage(ax2, consequence_fixed_map, '(b) After-fix Actions', action_label, action_label_to_id, return_handles_labels=True)
 # Legend for plot 2
-legend2 = legend2_ax.legend(handles2, labels2, loc="center left", ncol=3, frameon=False, bbox_to_anchor=(-0.05, 0.4), handletextpad=0.6, columnspacing=0.7, labelspacing=0.2)
+legend2 = legend2_ax.legend(handles2, labels2, loc="center left", ncol=6, frameon=False, bbox_to_anchor=(-0.4, 1.3), handletextpad=0.2, columnspacing=0.4, labelspacing=0.2, handlelength=0.6)
 
 plt.savefig('test_methods_comparison.pdf', bbox_inches='tight', pad_inches=0.0)
 plt.show()

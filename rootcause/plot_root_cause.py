@@ -44,7 +44,7 @@ rootcause_label_to_id = {
 
 # Shortened labels for display
 rootcause_short_labels = {
-    "semantic(incorrect update stats)": "States",
+    "semantic(incorrect update stats)": "State",
     # "semantic(maintain in-memory data structure wrong cfs tree list etc)": "Corrupted Data Structure",
     "semantic(incorrect logic implementation making decision  update attr managetimer etc)": "Logic",
     "concurrency": "Concurrency",
@@ -144,7 +144,7 @@ print("Consequence to Root Cause mapping:")
 print(consequence_rootcause_map)
 
 # Create a single plot showing consequence vs root cause
-fig, ax = plt.subplots(figsize=(4.5, 1.3))
+fig, ax = plt.subplots(figsize=(4.5, 1.1))
 
 # Get sorted consequence groups (reversed for horizontal bars)
 consequence_groups = sorted(consequence_rootcause_map.keys(), 
@@ -218,15 +218,15 @@ for i, (rootcause, rootcause_data) in enumerate(zip(all_rootcauses, data)):
 ax.set_yticks(y)
 ax.set_yticklabels(consequence_groups, rotation=0)
 ax.set_xlim(0, 100)
-ax.set_xticks([0, 20, 40, 60, 80, 100])
-ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'])
+ax.set_xticks([])
+# ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'])
 ax.grid(axis='x', alpha=0.3)
 ax.tick_params(which='both', length=1)
 
 # Add legend at the bottom
-legend = ax.legend(loc='upper center', bbox_to_anchor=(0.3, -0.1), 
-                   ncol=5, frameon=False, handletextpad=0.1, 
-                   columnspacing=0.3, labelspacing=0.2, handlelength=0.5)
+legend = ax.legend(loc='upper center', bbox_to_anchor=(0.3, 0.1), 
+                   ncol=5, frameon=False, handletextpad=0.2, 
+                   columnspacing=0.5, labelspacing=0.2, handlelength=1)
 
 plt.tight_layout()
 plt.savefig('root_cause_consequence.pdf', bbox_inches='tight', pad_inches=0.0)
