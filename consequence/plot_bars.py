@@ -217,7 +217,7 @@ width_ratios = [left_ratio, right_ratio]
 
 fig, (ax1, ax2) = plt.subplots(
     1, 2,
-    figsize=(5, 0.8),  # Reduced height from 1.7 to 1.4
+    figsize=(5.2, 0.8),  # Reduced height from 1.7 to 1.4
     gridspec_kw={'wspace': 0.05, 'width_ratios': width_ratios}  # Remove space between subplots
 )
 

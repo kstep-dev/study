@@ -128,13 +128,18 @@ from matplotlib.lines import Line2D
 categories = ['Special Topology', 'KernelSpace Event', 'Sched Attribute', 'Workload Behavior']
 n_categories = len(categories)
 
-# Sort combinations by count (descending)
-sorted_data = sorted(zip(sorted_unique_comblists, comblist_count), key=lambda x: x[1], reverse=True)
+# Sort combinations by number of triggers needed (ascending), then by binary value, then by count (descending)
+def tuple_to_binary_value(t):
+    """Convert tuple like (0,1,0,1) to binary integer value"""
+    return int(''.join(map(str, t)), 2)
+
+sorted_data = sorted(zip(sorted_unique_comblists, comblist_count), 
+                     key=lambda x: (sum(x[0]), tuple_to_binary_value(x[0]), -x[1]))
 sorted_combs, sorted_counts = zip(*sorted_data)
 
 # Create figure with GridSpec
-fig = plt.figure(figsize=(4.5, 2.))
-gs = gridspec.GridSpec(2, 1, height_ratios=[1.5, 1], hspace=0.05)
+fig = plt.figure(figsize=(4.5, 1.6))
+gs = gridspec.GridSpec(2, 1, height_ratios=[1, 1], hspace=0.05)
 
 # Top subplot: bar chart
 ax_bar = fig.add_subplot(gs[0])
@@ -183,7 +188,7 @@ for col_idx, comb in enumerate(sorted_combs):
         y_coords = active_rows
         x_coords = [col_idx] * len(y_coords)
         ax_matrix.plot(x_coords, y_coords, 'o-', color='#5D688A', 
-                      linewidth=1, markersize=0, zorder=1)
+                      linewidth=1, markersize=0, zorder=4)
 
 # Set y-axis labels (categories)
 ax_matrix.set_yticks(range(n_categories))
