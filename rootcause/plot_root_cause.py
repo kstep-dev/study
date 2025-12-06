@@ -144,7 +144,7 @@ print("Consequence to Root Cause mapping:")
 print(consequence_rootcause_map)
 
 # Create a single plot showing consequence vs root cause
-fig, ax = plt.subplots(figsize=(4.5, 1.6))
+fig, ax = plt.subplots(figsize=(4.5, 1.3))
 
 # Get sorted consequence groups (reversed for horizontal bars)
 consequence_groups = sorted(consequence_rootcause_map.keys(), 
@@ -180,13 +180,38 @@ colors = [rootcause_id_to_colors[rootcause_label_to_id.get(rc, -1)] for rc in al
 # Plot horizontal stacked bars
 left = np.zeros(len(consequence_groups))
 bars = []
+# Store actual counts for annotations
+actual_counts = []
 for i, (rootcause, rootcause_data) in enumerate(zip(all_rootcauses, data)):
+    # Calculate actual counts from percentages
+    counts_for_rootcause = []
+    for j, group in enumerate(consequence_groups):
+        total_bugs = sum(consequence_rootcause_map[group].values())
+        count = consequence_rootcause_map[group].get(rootcause, 0)
+        counts_for_rootcause.append(count)
+    actual_counts.append(counts_for_rootcause)
+    
     # Use short label for legend
     display_label = rootcause_short_labels.get(rootcause, rootcause)
     bar = ax.barh(y, rootcause_data, height, label=display_label, 
                   left=left, color=colors[i])
     bars.append(bar)
     left += rootcause_data
+
+# Add count annotations
+color_list = ['white', 'black', 'white', 'black', 'black', 'black']
+for i, (rootcause, rootcause_data) in enumerate(zip(all_rootcauses, data)):
+    for j, (percentage, count) in enumerate(zip(rootcause_data, actual_counts[i])):
+        if count > 0:  # Only show if there are bugs
+            # Calculate position for text
+            x_pos = sum(data[k][j] for k in range(i)) + percentage / 2
+            y_pos = y[j]
+            
+            # Only show text if percentage is large enough
+            # if percentage > 5:
+            ax.text(x_pos, y_pos, str(count), 
+                    ha='center', va='center', fontsize=8, 
+                    color=color_list[i])
 
 # Customize plot
 # ax.set_xlabel('Percentage (%)')

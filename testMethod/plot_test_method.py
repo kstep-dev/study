@@ -230,10 +230,38 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
     # Plot horizontal stacked bars
     left = np.zeros(len(consequence_groups))
     bars = []
+    # Store actual counts for annotations
+    actual_counts = []
     for i, (method, method_data) in enumerate(zip(all_methods, data)):
+        # Calculate actual counts from percentages
+        counts_for_method = []
+        for j, group in enumerate(consequence_groups):
+            total_bugs = sum(consequence_to_methods[group].values())
+            count = consequence_to_methods[group].get(method, 0)
+            counts_for_method.append(count)
+        actual_counts.append(counts_for_method)
+        
         bar = ax.barh(y, method_data, height, label=labels[method], left=left, color=colors[i])
         bars.append(bar)
         left += method_data
+    
+    # Add count annotations
+    # Define text colors for each method type based on background colors
+    if title == '(a) Manifest Methods':
+        color_list = ['white', 'white', 'black', 'black', 'white', 'black', 'black']
+    else:
+        color_list = ['white', 'black', 'white', 'black', 'black', 'black']
+    
+    for i, (method, method_data) in enumerate(zip(all_methods, data)):
+        for j, (percentage, count) in enumerate(zip(method_data, actual_counts[i])):
+            if count > 0:  # Only show if there are bugs
+                # Calculate position for text
+                x_pos = sum(data[k][j] for k in range(i)) + percentage / 2
+                y_pos = y[j]
+                
+                ax.text(x_pos, y_pos, str(count), 
+                       ha='center', va='center', fontsize=8, 
+                       color=color_list[i])
     
     # Customize plot
     # if title != '(a) Manifest Methods':
@@ -242,8 +270,12 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
     ax.set_yticks(y)
     ax.set_yticklabels(consequence_groups, rotation=0)
     ax.set_xlim(0, 100)
-    ax.set_xticks([0, 20, 40, 60, 80, 100])
-    ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'])
+    if title == '(a) Manifest Methods':
+        ax.set_xticks([])
+        # ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'])
+    else:
+        ax.set_xticks([0, 20, 40, 60, 80, 100])
+        ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'])
     # Don't set legend here; will do globally
     ax.grid(axis='x', alpha=0.3)
     
@@ -271,7 +303,7 @@ ax2.tick_params(which='both', length=1)
 # Plot 1: Methods (before fix)
 handles1, labels1 = plot_stacked_bar_percentage(ax1, consequence_map, '(a) Manifest Methods', discover_label, discover_label_to_id, return_handles_labels=True)
 # Legend for plot 1
-legend1 = legend1_ax.legend(handles1, labels1, loc="center left", ncol=2, frameon=False, bbox_to_anchor=(-0.3, 0.4), handletextpad=0.6, columnspacing=0.6, handlelength=1.2, labelspacing=0.2)
+legend1 = legend1_ax.legend(handles1, labels1, loc="center left", ncol=2, frameon=False, bbox_to_anchor=(-0.3, 0.6), handletextpad=0.6, columnspacing=0.6, handlelength=1.2, labelspacing=0.2)
 
 # Plot 2: Fixed Methods (after fix)
 handles2, labels2 = plot_stacked_bar_percentage(ax2, consequence_fixed_map, '(b) After-fix Actions', action_label, action_label_to_id, return_handles_labels=True)
