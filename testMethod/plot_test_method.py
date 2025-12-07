@@ -241,7 +241,7 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
             counts_for_method.append(count)
         actual_counts.append(counts_for_method)
         
-        bar = ax.barh(y, method_data, height, label=labels[method], left=left, color=colors[i], edgecolor='black', linewidth=0.3)
+        bar = ax.barh(y, method_data, height, label=labels[method], left=left, color=colors[i], edgecolor='gray', linewidth=0.01)
         bars.append(bar)
         left += method_data
     

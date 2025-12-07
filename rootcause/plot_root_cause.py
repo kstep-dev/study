@@ -194,7 +194,7 @@ for i, (rootcause, rootcause_data) in enumerate(zip(all_rootcauses, data)):
     # Use short label for legend
     display_label = rootcause_short_labels.get(rootcause, rootcause)
     bar = ax.barh(y, rootcause_data, height, label=display_label, 
-                  left=left, color=colors[i], edgecolor='black', linewidth=0.3)
+                  left=left, color=colors[i], edgecolor='gray', linewidth=0.01)
     bars.append(bar)
     left += rootcause_data
 

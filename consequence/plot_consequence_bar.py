@@ -220,10 +220,19 @@ def get_warning_color(group_name, warning_type):
 warning_types = ['panic', 'warning', 'silent']
 
 # --- Plotting Percentage-based Horizontal Stacked Bar Chart ---
-fig, ax = plt.subplots(figsize=(4.8, 2.1))
+fig, ax = plt.subplots(figsize=(4.8, 1.5))
 
 # Reverse component order so core is at top, and add "Total" at bottom
-component_labels_reversed = ['Total'] + COMPONENTS[::-1]
+COMPONENTS_LABELS = [
+    "core",
+    "topology",
+    "account",
+    "fair",
+    "deadline",
+    "rt",
+    # "load est.",
+]
+component_labels_reversed = ['Total'] + COMPONENTS_LABELS[::-1]
 y_pos = np.arange(len(component_labels_reversed))
 bar_height = 1
 
@@ -261,7 +270,7 @@ for group_name in groupnames:
         
         bars = ax.barh(y_pos, percentages_reversed, bar_height,
                         left=left, color=color,
-                        edgecolor='black', linewidth=0.3)
+                        edgecolor='gray', linewidth=0.01)
         
         # Add to legend organized by group
         legend_dict[group_name]['elements'].append(bars[0])
@@ -295,7 +304,7 @@ legend_labels = []
 # Using ncol=4 fills row by row, so we add items in row order
 # Row 1 (items 0-3): one from each column
 legend_elements.append(legend_dict['Func. Crash/Hang']['elements'][0])
-legend_labels.append('Func.Crash/Hang\n(Panic)')
+legend_labels.append('Func.Crash/Hang\n    Panic')
 
 # Row 2 (items 4-7): second from each column
 legend_elements.append(plt.Rectangle((0, 0), 1, 1, fc='none', ec='none', linewidth=0, alpha=0))
@@ -303,31 +312,32 @@ legend_labels.append('')
 
 
 legend_elements.append(legend_dict['Func. Non-fatal']['elements'][0])
-legend_labels.append('Func. Non-fatal\n(Warning)')
+legend_labels.append('Func. Non-fatal\n    Warning')
 
 legend_elements.append(legend_dict['Func. Non-fatal']['elements'][1])
-legend_labels.append('Func. Non-fatal\n(Silent)')
+legend_labels.append('    Silent')
 
 
 legend_elements.append(legend_dict['Policy. With Effect']['elements'][0])
-legend_labels.append('Policy. With Effect\n(Warning)')
+legend_labels.append('Policy. With Effect\n    Warning')
 
 legend_elements.append(legend_dict['Policy. With Effect']['elements'][1])
-legend_labels.append('Policy. With Effect\n(Silent)')
+legend_labels.append('    Silent')
 
 
 legend_elements.append(legend_dict['Policy. Benign']['elements'][0])
-legend_labels.append('Policy. Benign\n(Warning)')
+legend_labels.append('Policy. Benign\n    Warning')
 
 # # Row 2 (items 4-7): second from each column
 # legend_elements.append(plt.Rectangle((0, 0), 1, 1, fc='none', ec='none', linewidth=0, alpha=0))
 # legend_labels.append('')
 
 legend_elements.append(legend_dict['Policy. Benign']['elements'][1])
-legend_labels.append('Policy. Benign\n(Silent)')
+legend_labels.append('    Silent')
 
 # Add a separator line between Total and components
-ax.axhline(y=0.5, color='black', linewidth=1.5, linestyle='-', zorder=10)
+# Extend line to the left to include y-axis labels area
+ax.plot([-25, 100], [0.5, 0.5], color='black', linewidth=1., linestyle='-', zorder=10, clip_on=False)
 
 # Customize percentage plot
 # ax.set_ylabel('Component')
@@ -336,22 +346,28 @@ ax.set_ylim(bottom=-0.5, top = 6.5)
 ax.set_yticks(y_pos)
 ax.set_yticklabels(component_labels_reversed)
 ax.set_xlim(0, 100)
-ax.set_xticks([0, 20, 40, 60, 80, 100])
-ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'], fontsize=9)
+ax.set_xticks([])
+# ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'], fontsize=8)
 ax.tick_params(which='both', length=0.1)
-legend = ax.legend(legend_elements, legend_labels, loc='upper center', bbox_to_anchor=(0.43, -0.1),
-           frameon=False, ncol=4, handlelength=0.5, columnspacing=1.2, handletextpad=0.2, fontsize=9
+legend = ax.legend(legend_elements, legend_labels, loc='upper center', bbox_to_anchor=(0.44, -0.1),
+           frameon=False, ncol=4, handlelength=0.9, columnspacing=1.2, handletextpad=-1, fontsize=9.5,
+           labelspacing=0.1, borderpad=0.
            )
 
-# Align all legend handlers to the top of text
+# Align all legend handlers to the top of text and adjust vertical position
 for vpack in legend._legend_handle_box.get_children():
     for hpack in vpack.get_children():
-        hpack.align = 'top'
+        hpack.align = 'bottom'
+
+# Adjust handler vertical offset by modifying the text position
+for text in legend.get_texts():
+    # text.set_verticalalignment('top')
+    text.set_y(text.get_position()[1] - 1)
 ax.grid(axis='x', alpha=0.3, linestyle='--')
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
-plt.tight_layout(pad = 0.0)
+plt.tight_layout(pad = 0.02)
 plt.savefig("consequence_bar_percentage.pdf", bbox_inches=0.0)
 plt.savefig("consequence_bar_percentage.png", dpi=300, bbox_inches=0.0)
 
