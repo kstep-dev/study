@@ -172,7 +172,7 @@ for rootcause in all_rootcauses:
 
 # Create horizontal stacked bar chart
 y = np.arange(len(consequence_groups))
-height = 0.8
+height = 1
 
 # Generate colors for each root cause
 colors = [rootcause_id_to_colors[rootcause_label_to_id.get(rc, -1)] for rc in all_rootcauses]
@@ -194,7 +194,7 @@ for i, (rootcause, rootcause_data) in enumerate(zip(all_rootcauses, data)):
     # Use short label for legend
     display_label = rootcause_short_labels.get(rootcause, rootcause)
     bar = ax.barh(y, rootcause_data, height, label=display_label, 
-                  left=left, color=colors[i])
+                  left=left, color=colors[i], edgecolor='black', linewidth=0.3)
     bars.append(bar)
     left += rootcause_data
 
@@ -214,7 +214,7 @@ for i, (rootcause, rootcause_data) in enumerate(zip(all_rootcauses, data)):
                     color=color_list[i])
 
 # Customize plot
-# ax.set_xlabel('Percentage (%)')
+ax.set_ylim(bottom=-0.5, top = len(consequence_groups) - 0.5)
 ax.set_yticks(y)
 ax.set_yticklabels(consequence_groups, rotation=0)
 ax.set_xlim(0, 100)

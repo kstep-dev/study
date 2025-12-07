@@ -137,6 +137,12 @@ sorted_data = sorted(zip(sorted_unique_comblists, comblist_count),
                      key=lambda x: (sum(x[0]), tuple_to_binary_value(x[0]), -x[1]))
 sorted_combs, sorted_counts = zip(*sorted_data)
 
+# Swap columns 6 and 7 (indices 5 and 6)
+sorted_combs = list(sorted_combs)
+sorted_counts = list(sorted_counts)
+sorted_combs[5], sorted_combs[6] = sorted_combs[6], sorted_combs[5]
+sorted_counts[5], sorted_counts[6] = sorted_counts[6], sorted_counts[5]
+
 # Create figure with GridSpec
 fig = plt.figure(figsize=(4.5, 1.6))
 gs = gridspec.GridSpec(2, 1, height_ratios=[1, 1], hspace=0.05)

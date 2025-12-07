@@ -167,7 +167,7 @@ ax.set_title("(a) LOC across versions", fontsize=10)
 # Legend subplot (bottom spanning both columns)
 ax_leg = fig.add_subplot(gs[1, :])
 ax_leg.axis("off")
-legend_labels = ["core", "fair", "topology", "deadline", "accounting", "rt"]
+legend_labels = ["core",  "topology", "accounting", "fair", "deadline",  "rt"]
 
 legend_handles = []
 for i, c in enumerate(legend_labels):
@@ -179,7 +179,7 @@ for i, c in enumerate(legend_labels):
 # Move the legend lower by decreasing the bbox_to_anchor y-value
 ax_leg.legend(
     legend_handles,
-    ["core", "fair", "topology", "deadline", "acct", "rt"],
+    ["core", "topology", "acct", "fair", "deadline",  "rt"],
     loc="center",
     ncol=6,
     # fontsize=7,

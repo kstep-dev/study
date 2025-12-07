@@ -219,7 +219,7 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
     
     # Create horizontal stacked bar chart
     y = np.arange(len(consequence_groups))
-    height = 0.6
+    height = 1
     
     # Generate colors for each method
     if title == '(a) Manifest Methods':
@@ -241,7 +241,7 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
             counts_for_method.append(count)
         actual_counts.append(counts_for_method)
         
-        bar = ax.barh(y, method_data, height, label=labels[method], left=left, color=colors[i])
+        bar = ax.barh(y, method_data, height, label=labels[method], left=left, color=colors[i], edgecolor='black', linewidth=0.3)
         bars.append(bar)
         left += method_data
     
@@ -254,7 +254,7 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
     
     for i, (method, method_data) in enumerate(zip(all_methods, data)):
         for j, (percentage, count) in enumerate(zip(method_data, actual_counts[i])):
-            if count > 0:  # Only show if there are bugs
+            if count > 2:  # Only show if there are bugs
                 # Calculate position for text
                 x_pos = sum(data[k][j] for k in range(i)) + percentage / 2
                 y_pos = y[j]
@@ -278,6 +278,7 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
     #     ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'])
     # Don't set legend here; will do globally
     ax.grid(axis='x', alpha=0.3)
+    ax.set_ylim(bottom=-0.5, top = len(consequence_groups) - 0.5)
     
     if return_handles_labels:
         # Return handles and labels for legend (one bar per method)

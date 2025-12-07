@@ -151,7 +151,11 @@ def compute_warning_counts(matrix, groupnames):
 def plot_stacked_bars(ax, sorted_group_warning_counts, sorted_groupnames, title):
     """Create a stacked bar chart."""
     warning_types = ["panic", "warning", "silent"]
-    warning_colors = ["#BF092F", "#FA812F", "#80A1BA"]
+    if title == "(a) Functionality Bugs":
+        warning_colors = ["#BF092F", "#FA812F", "#FFCB61"]
+    else:
+        warning_colors = ["#BF092F", "#658C58", "#BBC863"]
+    # warning_colors = ["#BF092F", "#FA812F", "#80A1BA"]
     
     bottom = np.zeros(len(sorted_groupnames))
     
@@ -186,7 +190,7 @@ def plot_stacked_bars(ax, sorted_group_warning_counts, sorted_groupnames, title)
         y = 0
         for j in range(len(warning_types)):
             count = sorted_group_warning_counts[i, j]
-            if count > 0:
+            if count > 5:
                 ax.text(i, y + count/2, str(count), ha='center', va='center', 
                        fontsize=9, color="white" if j==0 else "black")
             y += count
