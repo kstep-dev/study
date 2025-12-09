@@ -254,7 +254,7 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
     
     for i, (method, method_data) in enumerate(zip(all_methods, data)):
         for j, (percentage, count) in enumerate(zip(method_data, actual_counts[i])):
-            if count > 2:  # Only show if there are bugs
+            if percentage > 2:  # Only show if there are bugs
                 # Calculate position for text
                 x_pos = sum(data[k][j] for k in range(i)) + percentage / 2
                 y_pos = y[j]
@@ -266,7 +266,7 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
     # Customize plot
     # if title != '(a) Manifest Methods':
         # ax.set_xlabel('Percentage (%)', labelpad=1)
-    ax.set_title(title, fontsize=10)
+    # ax.set_title(title, fontsize=10)
     ax.set_yticks(y)
     ax.set_yticklabels(consequence_groups, rotation=0)
     ax.set_xlim(0, 100)
@@ -288,8 +288,8 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
 
 # Instead of subplots, define a GridSpec for two axes and one (shared) legend panel beneath
 
-fig = plt.figure(constrained_layout=False, figsize=(4.5, 3.))
-gs = gridspec.GridSpec(4, 1, height_ratios=[0.8, 0.6, 0.8, 0.1], hspace=0.5)
+fig = plt.figure(constrained_layout=False, figsize=(4.5, 3.9))
+gs = gridspec.GridSpec(4, 1, height_ratios=[1, 0.8, 1, 0.01], hspace=0.5)
 
 ax1 = fig.add_subplot(gs[0, 0])
 legend1_ax = fig.add_subplot(gs[1, 0])
@@ -304,12 +304,12 @@ ax2.tick_params(which='both', length=1)
 # Plot 1: Methods (before fix)
 handles1, labels1 = plot_stacked_bar_percentage(ax1, consequence_map, '(a) Manifest Methods', discover_label, discover_label_to_id, return_handles_labels=True)
 # Legend for plot 1
-legend1 = legend1_ax.legend(handles1, labels1, loc="center left", ncol=2, frameon=False, bbox_to_anchor=(-0.3, 0.6), handletextpad=0.6, columnspacing=0.6, handlelength=1.2, labelspacing=0.2)
+legend1 = legend1_ax.legend(handles1, labels1, loc="center left", ncol=2, frameon=False, bbox_to_anchor=(-0.3, 0.7), handletextpad=0.6, columnspacing=0.6, handlelength=1.2, labelspacing=0.5)
 
 # Plot 2: Fixed Methods (after fix)
 handles2, labels2 = plot_stacked_bar_percentage(ax2, consequence_fixed_map, '(b) After-fix Actions', action_label, action_label_to_id, return_handles_labels=True)
 # Legend for plot 2
-legend2 = legend2_ax.legend(handles2, labels2, loc="center left", ncol=6, frameon=False, bbox_to_anchor=(-0.4, 1.3), handletextpad=0.2, columnspacing=0.4, labelspacing=0.2, handlelength=0.6)
+legend2 = legend2_ax.legend(handles2, labels2, loc="center left", ncol=6, frameon=False, bbox_to_anchor=(-0.4, 2.5), handletextpad=0.2, columnspacing=0.4, labelspacing=0.2, handlelength=0.6)
 
 plt.savefig('test_methods_comparison.pdf', bbox_inches='tight', pad_inches=0.0)
 plt.show()

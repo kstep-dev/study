@@ -220,7 +220,7 @@ def get_warning_color(group_name, warning_type):
 warning_types = ['panic', 'warning', 'silent']
 
 # --- Plotting Percentage-based Horizontal Stacked Bar Chart ---
-fig, ax = plt.subplots(figsize=(4.8, 1.5))
+fig, ax = plt.subplots(figsize=(4.8, 1.8))
 
 # Reverse component order so core is at top, and add "Total" at bottom
 COMPONENTS_LABELS = [
@@ -349,8 +349,8 @@ ax.set_xlim(0, 100)
 ax.set_xticks([])
 # ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'], fontsize=8)
 ax.tick_params(which='both', length=0.1)
-legend = ax.legend(legend_elements, legend_labels, loc='upper center', bbox_to_anchor=(0.44, -0.1),
-           frameon=False, ncol=4, handlelength=0.9, columnspacing=1.2, handletextpad=-1, fontsize=9.5,
+legend = ax.legend(legend_elements, legend_labels, loc='upper center', bbox_to_anchor=(0.44, -0.),
+           frameon=False, ncol=4, handlelength=0.9, columnspacing=1.3, handletextpad=-1, fontsize=9.5,
            labelspacing=0.1, borderpad=0.
            )
 
@@ -367,7 +367,7 @@ ax.grid(axis='x', alpha=0.3, linestyle='--')
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
-plt.tight_layout(pad = 0.02)
+plt.tight_layout(pad = 0.1)
 plt.savefig("consequence_bar_percentage.pdf", bbox_inches=0.0)
 plt.savefig("consequence_bar_percentage.png", dpi=300, bbox_inches=0.0)
 

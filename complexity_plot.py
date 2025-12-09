@@ -67,9 +67,9 @@ for i in range(len(all_components)):
 print(percentage_of_codes, percetage_of_bugs)
 
 # ==== Use gridspec to separate plot and legend ====
-fig = plt.figure(figsize=(4.3, 1.2))
+fig = plt.figure(figsize=(4.3, 1.3))
 # Use gridspec with two columns for side-by-side plots, and one small row for the legend
-gs = gridspec.GridSpec(2, 2, width_ratios=[2, 1], height_ratios=[11, 1],  bottom=0.33, wspace=0.2)
+gs = gridspec.GridSpec(2, 2, width_ratios=[2, 1], height_ratios=[11, 1],  bottom=0.31, wspace=0.2)
 
 # Bar plot (left)
 ax = fig.add_subplot(gs[0, 0])
@@ -88,7 +88,7 @@ for i, comp in enumerate(all_components):
     bars.append(bar)
 
 ax.set_xlim(0 - 0.5, len(selected_versions) )
-ytick_vals = np.arange(0, max(bottom) + 10000, 10000)
+ytick_vals = np.arange(0, max(bottom) + 20000, 20000)
 ytick_labels = [f"{int(y/1000)}k" for y in ytick_vals if y != 0]
 # Always keep 0 on axis
 ytick_vals = [0] + [y for y in ytick_vals if y != 0]
@@ -110,8 +110,9 @@ for i, v in enumerate(selected_versions):
         tick_labels.append(v[1:])
 ax.set_xticks(tick_indices)
 ax.set_xticklabels(tick_labels, rotation=90)
-ax.set_ylabel("LOC")
-ax.tick_params(axis='both', which='major', labelsize=8, pad=0.1)
+# ax.set_ylabel("LOC")
+ax.tick_params(axis='x', which='major', labelsize=8, pad=0.1)
+ax.tick_params(axis='y', which='major', labelsize=8, pad=0.1)
 ax.xaxis.labelpad = 1.3  # Make xlabel closer
 ax.yaxis.labelpad = 1.3  # Make ylabel closer
 # ax.set_title("Component LOC by Version")
@@ -141,11 +142,11 @@ jitter_offsets = {
 
 for i, (c, x, y) in enumerate(zip(scatter_components, x_vals, y_vals)):
     dx, dy = jitter_offsets.get(c, (0.0, 0.0))
-    ax_scatter.scatter(x + dx, y + dy, color=component_colors[c], marker=marker_styles[c], edgecolor='black', label=c, s=60, zorder=3)
+    ax_scatter.scatter(x + dx, y + dy, color=component_colors[c], marker=marker_styles[c], edgecolor='black', label=c, s=50, zorder=3)
 
 ax_scatter.axline((0, 0), slope=1, color="gray", linestyle="--", lw=1, zorder=0)
-ax_scatter.set_xlabel("% of code")
-ax_scatter.set_ylabel("% of bugs")
+ax_scatter.set_xlabel("% of code", fontsize=8)
+ax_scatter.set_ylabel("% of bugs", fontsize=8)
 ax_scatter.set_xlim(0, 0.41)
 ax_scatter.set_ylim(0, 0.41)
 ax_scatter.grid(axis="both", linestyle=":", alpha=0.4, zorder=0)
@@ -158,9 +159,9 @@ ax_scatter.tick_params(axis='both', which='major', labelsize=8, pad=0.1)
 ax_scatter.xaxis.labelpad = 1.3  # Make xlabel closer
 ax_scatter.yaxis.labelpad = 1.3  # Make ylabel closer
 
-# set title for the subplots
-ax_scatter.set_title("(b) Bug vs. Code", fontsize=10)
-ax.set_title("(a) LOC across versions", fontsize=10)
+# set title for the subplots,
+ax_scatter.set_title("(b) Bug vs. Code", fontsize=9, pad=1)
+ax.set_title("(a) LOC across versions", fontsize=9, pad=1)
 # ax_scatter.xaxis.set_label_coords(0.5, -0.1)
 # ax_scatter.yaxis.set_label_coords(-0.1, 0.5)
 
@@ -183,16 +184,18 @@ ax_leg.legend(
     loc="center",
     ncol=6,
     # fontsize=7,
-    bbox_to_anchor=(0.45, -6),  # moved further down
+    bbox_to_anchor=(0.45, -5),  # moved further down
     columnspacing=0.5,
 # INSERT_YOUR_CODE
     handletextpad=0, borderpad=0,  # make legend patch separation smaller
     frameon=False,
+# INSERT_YOUR_CODE
+     markerscale=0.7,
 )
 # plt.subplots_adjust(hspace=0.06, bottom=0.3)  # increased bottom margin to fit legend
 
 # INSERT_YOUR_CODE
-plt.subplots_adjust(left=0.06, right=0.98, top=0.85, bottom=0.5) 
+plt.subplots_adjust(left=0.06, right=0.98, top=0.88, bottom=0.4) 
 
 # plt.tight_layout(pad = 0)
 plt.savefig("sched_loc_by_component.pdf")
