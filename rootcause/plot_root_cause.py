@@ -144,7 +144,7 @@ print("Consequence to Root Cause mapping:")
 print(consequence_rootcause_map)
 
 # Create a single plot showing consequence vs root cause
-fig, ax = plt.subplots(figsize=(4.5, 1.4))
+fig, ax = plt.subplots(figsize=(5.3, 1.4))
 
 # Get sorted consequence groups (reversed for horizontal bars)
 consequence_groups = sorted(consequence_rootcause_map.keys(), 
@@ -229,5 +229,5 @@ legend = ax.legend(loc='upper center', bbox_to_anchor=(0.3, 0.05),
                    columnspacing=0.5, labelspacing=0.2, handlelength=1)
 
 plt.tight_layout()
-plt.savefig('root_cause_consequence.pdf', bbox_inches='tight', pad_inches=0.0)
+plt.savefig('root_cause_consequence.pdf', bbox_inches='tight', pad_inches=0.05)
 plt.show()

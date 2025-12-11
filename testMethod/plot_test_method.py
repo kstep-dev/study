@@ -48,9 +48,9 @@ discover_label_to_id = {
     "Benchmark/stress test/standard test fail": 1,
     "Customizied test": 2,
     "Fuzz": 3,
-    "Code Review or Internal Debug": 4,
-    "Other kernel subsystem behavior": 5,
-    "User reported or In-production": 6,
+    "Code Review or Internal Debug": 6,
+    "Other kernel subsystem behavior": 4,
+    "User reported or In-production": 5,
 }
 
 discover_id_to_colors = {
@@ -58,10 +58,14 @@ discover_id_to_colors = {
     1: '#53629E',
     2: '#87BAC3',
     3: '#D6F4ED',
-    4: '#B45253',
-    5: '#FCB53B',
-    6: '#FFE797',
+    4: '#FCB53B',
+    5: '#FFE797',
+    6: '#B45253',
 }
+
+# 4: '#628141',
+# 5: '#C1E59F',
+# 6: '#B45253',
 action_label_to_id = {
     "unit test": 2,
     # "bug-on": 1,
@@ -248,7 +252,7 @@ def plot_stacked_bar_percentage(ax, consequence_to_methods, title, labels, label
     # Add count annotations
     # Define text colors for each method type based on background colors
     if title == '(a) Manifest Methods':
-        color_list = ['white', 'white', 'black', 'black', 'white', 'black', 'black']
+        color_list = ['white', 'white', 'black', 'black', 'white', 'black', 'white']
     else:
         color_list = ['white', 'black', 'white', 'black', 'black', 'black']
     

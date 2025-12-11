@@ -110,7 +110,7 @@ plt.tick_params(axis='x', which='major', pad=0.1, length=2)
 
 
 # Define a discrete colormap with 3 distinct colors (no gradient)
-cmap = ListedColormap(['#ffffff', '#4f98c6', '#184478', '#FCB53B'])  # example: white, blue, dark blue, black
+cmap = ListedColormap(['#ffffff', '#4f98c6', '#184478', '#FF6C0C'])  # example: white, blue, dark blue, black
 bounds = [0, 1, 2, 3, 4]  # to separate 0, 1, 2, 3 as blocks
 norm = BoundaryNorm(bounds, cmap.N)
 

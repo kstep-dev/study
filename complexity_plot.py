@@ -18,10 +18,10 @@ all_components = sorted(all_components)
 all_components = ["core", "topology",  "accounting",  "fair", "deadline", "rt"]
 
 component_colors = {
-    "core": "#87BAC3",
+    "core": "#234C6A",
     # "clock": "#5459AC",
-    "topology": "#648DB3",
-    "accounting": "#53629E",
+    "topology": "#AEDEFC",
+    "accounting": "#648DB3",
     # "Load estimation": "#84994F",
     "fair": "#A72703",
     "rt": "#FCB53B",
@@ -126,7 +126,7 @@ y_vals = [percetage_of_bugs[c] for c in scatter_components]
 # Slight jitter for crowded markers to improve separation
 import numpy as np
 
-marker_styles = {'core': '*', 'fair': 's', 'topology': '^', 'deadline': 'v', 'accounting': 'o', 'rt': 'P', 'Load estimation': 'p'}
+marker_styles = {'core': 'p', 'fair': 's', 'topology': '^', 'deadline': 'v', 'accounting': 'o', 'rt': 'X', 'Load estimation': 'p'}
 
 # Define manual jitter offsets (in data units) for visually crowded points
 # Positive/negative values for tiny horizontal move; only adjust close points
@@ -142,7 +142,7 @@ jitter_offsets = {
 
 for i, (c, x, y) in enumerate(zip(scatter_components, x_vals, y_vals)):
     dx, dy = jitter_offsets.get(c, (0.0, 0.0))
-    ax_scatter.scatter(x + dx, y + dy, color=component_colors[c], marker=marker_styles[c], edgecolor='black', label=c, s=50, zorder=3)
+    ax_scatter.scatter(x + dx, y + dy, color=component_colors[c], marker=marker_styles[c], edgecolor='black', linewidth=0.5, label=c, s=50, zorder=3)
 
 ax_scatter.axline((0, 0), slope=1, color="gray", linestyle="--", lw=1, zorder=0)
 ax_scatter.set_xlabel("% of code", fontsize=8)
@@ -161,7 +161,7 @@ ax_scatter.yaxis.labelpad = 1.3  # Make ylabel closer
 
 # set title for the subplots,
 ax_scatter.set_title("(b) Bug vs. Code", fontsize=9, pad=1)
-ax.set_title("(a) LOC across versions", fontsize=9, pad=1)
+ax.set_title("(a) LoC across versions", fontsize=9, pad=1)
 # ax_scatter.xaxis.set_label_coords(0.5, -0.1)
 # ax_scatter.yaxis.set_label_coords(-0.1, 0.5)
 
@@ -175,7 +175,11 @@ for i, c in enumerate(legend_labels):
     # Use the marker and color for each component
     marker = marker_styles[c]
     color = component_colors[c]
-    handle = plt.Line2D([0], [0], marker=marker, color='w', markerfacecolor=color, markeredgecolor='black', markersize=10, linewidth=0)
+    # if c == 'deadline' or c == 'rt':
+    #     handle = plt.Line2D([0], [0], marker=marker, color='w', markerfacecolor=color, markeredgecolor='black', markeredgewidth=0.1, markersize=10)
+    # else:
+    handle = plt.Line2D([0], [0], marker=marker, color='w', markerfacecolor=color, markeredgecolor='black', markeredgewidth=0.1, markersize=10)
+
     legend_handles.append(handle)
 # Move the legend lower by decreasing the bbox_to_anchor y-value
 ax_leg.legend(
@@ -190,7 +194,7 @@ ax_leg.legend(
     handletextpad=0, borderpad=0,  # make legend patch separation smaller
     frameon=False,
 # INSERT_YOUR_CODE
-     markerscale=0.7,
+     markerscale=1,
 )
 # plt.subplots_adjust(hspace=0.06, bottom=0.3)  # increased bottom margin to fit legend
 

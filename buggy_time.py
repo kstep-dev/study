@@ -15,7 +15,7 @@ import numpy as np
 
 from collections import defaultdict
 
-foundation_components = ["core", "topology",  "accounting"]
+foundation_components = ["core", "topology",  "account"]
 policy_components = ["fair", "rt", "deadline"]
 
 diff_dict = {
@@ -50,7 +50,7 @@ with open(fixes_file, newline='', encoding="utf-8") as f:
             for component in components:
                 diff_dict[component].append(diff.days)
 
-fig, axes = plt.subplots(1, 2, figsize=(4.2, 1.2), sharex=True, sharey=True)
+fig, axes = plt.subplots(1, 2, figsize=(4.5, 1.2), sharex=True, sharey=True)
 colors = plt.cm.tab20.colors
 
 foundation = ["core", "topology", "accounting"]
@@ -61,18 +61,18 @@ for idx, component in enumerate(foundation):
     data = sorted(diff_dict[component])
     if data:
         y_vals = [i / len(data) * 100 for i in range(len(data))]
-        ax0.plot(data, y_vals, label=component, color=colors[idx])
-ax0.set_title("(a) Scheduler Framework", fontsize=10)
+        ax0.plot(data, y_vals, label=component if component != "accounting" else "account", color=colors[idx])
+ax0.set_title("(a) Scheduler Framework", fontsize=9)
 ax0.set_xlim(1, 7000)
 ax0.set_ylim(0, 105)
-ax0.set_ylabel("% of bugs")
-ax0.set_xlabel("Bug lifetime (days)", labelpad=0)
+ax0.set_ylabel("% of bugs", fontsize=9)
+ax0.set_xlabel("Bug lifetime (days)", labelpad=0, fontsize=9)
 ax0.set_xscale('log')
 ax0.set_yticks([0, 50, 100])
 ax0.set_yticklabels(["0", "50", "100"])
-ax0.tick_params(axis = 'both', length=1)
+ax0.tick_params(axis = 'both', length=1, labelsize=8)
 ax0.grid(True, linestyle='--', alpha=0.5)
-ax0.legend(loc='upper left', frameon=False, borderpad=0, handlelength=0.2, handletextpad=0.2,  labelspacing=0.12, ncol = 2, columnspacing=0.5)
+ax0.legend(loc='upper left', frameon=False, borderpad=0, handlelength=0.5, handletextpad=0.2,  labelspacing=0.12, ncol = 2, columnspacing=-0.2)
 
 ax1 = axes[1]
 for idx, component in enumerate(policy):
@@ -80,17 +80,17 @@ for idx, component in enumerate(policy):
     if data:
         y_vals = [i / (len(data) - 1) * 100 for i in range(len(data))]
         ax1.plot(data, y_vals, label=component, color=colors[idx+len(foundation)])
-ax1.set_title("(b) Scheduler Classes", fontsize=10)
+ax1.set_title("(b) Scheduler Classes", fontsize=9)
 ax1.set_xlim(1, 7000)
 ax1.set_ylim(0, 105)
-ax1.set_xlabel("Bug lifetime (days)", labelpad=0)
+ax1.set_xlabel("Bug lifetime (days)", labelpad=0, fontsize=9)
 ax1.set_xscale('log')
 ax1.set_yticks([0, 50, 100])
-ax1.tick_params(axis = 'both', length=1)
+ax1.tick_params(axis = 'both', length=0.5, labelsize=8)
 ax1.grid(True, linestyle='--', alpha=0.5)
-ax1.legend(loc='upper left', frameon=False, borderpad=0, handlelength=0.2, handletextpad=0.2, labelspacing=0.15, ncol = 2, columnspacing=0.5)
+ax1.legend(loc='upper left', frameon=False, borderpad=0, handlelength=0.5, handletextpad=0.2, labelspacing=0.15, ncol = 2, columnspacing=0.5)
 # ax1.set_yticklabels([])
 
-plt.tight_layout(pad=0.1)
+plt.tight_layout(pad=0.0, rect=[0, 0, 1, 0.98])
 plt.savefig("buggy_time.pdf")
 

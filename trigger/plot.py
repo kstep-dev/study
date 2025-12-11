@@ -125,7 +125,7 @@ from matplotlib.patches import Circle
 from matplotlib.lines import Line2D
 
 # Prepare data for UpSet-style plot
-categories = ['Special Topology', 'KernelSpace Event', 'Sched Attribute', 'Workload Behavior']
+categories = ['CPU Attribute', 'Kernel Event', 'Sched Attribute', 'Workload Behavior']
 n_categories = len(categories)
 
 # Sort combinations by number of triggers needed (ascending), then by binary value, then by count (descending)

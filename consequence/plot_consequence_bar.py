@@ -211,6 +211,19 @@ consequence_base_colors = {
     'Policy. Benign': {'panic':'#BF092F', 'warning':'#7A7A73', 'silent':'#EEEEEE'},
 }
 
+total_severity_counts = {name: {'panic': 0, 'warning': 0, 'silent': 0} for name in groupnames}
+# for comp_idx, hashes in component_to_hash.items():
+for h in commit_hashes:
+    severity = hash_to_severity[h]
+    warning = hash_to_warning[h]
+    warning_type = warning_id_to_name[warning]
+    
+    if severity in severity_id_to_name:
+        severity_name = severity_id_to_name[severity]
+        total_severity_counts[severity_name][warning_type] += 1
+
+print(total_severity_counts)
+
 # Create color variations for warning types (darker to lighter)
 def get_warning_color(group_name, warning_type):
     """Generate color variations for warning types."""
@@ -220,7 +233,7 @@ def get_warning_color(group_name, warning_type):
 warning_types = ['panic', 'warning', 'silent']
 
 # --- Plotting Percentage-based Horizontal Stacked Bar Chart ---
-fig, ax = plt.subplots(figsize=(4.8, 1.8))
+fig, ax = plt.subplots(figsize=(5.2, 1.8))
 
 # Reverse component order so core is at top, and add "Total" at bottom
 COMPONENTS_LABELS = [
@@ -254,13 +267,25 @@ for group_name in groupnames:
         counts = np.array([comp['counts'][group_name][warning_type] for comp in component_data])
         # Calculate total bugs per component
         totals = np.array([sum(sum(comp['counts'][g].values()) for g in groupnames) for comp in component_data])
+        print(totals)
+        # totals = np.array([total_severity_counts['Func. Crash/Hang']['panic'], 
+        #                   total_severity_counts['Func. Non-fatal']['warning'], 
+        #                   total_severity_counts['Func. Non-fatal']['silent'], 
+        #                   total_severity_counts['Policy. With Effect']['warning'], 
+        #                   total_severity_counts['Policy. With Effect']['silent'],
+        #                   total_severity_counts['Policy. Benign']['warning'],
+        #                   total_severity_counts['Policy. Benign']['silent']])
+        print(totals)
         percentages = np.divide(counts, totals, where=totals!=0, out=np.zeros_like(counts, dtype=float)) * 100
         
         # Calculate total percentage
         total_count = sum(counts)
         total_all = sum(totals)
         total_pct = (total_count / total_all * 100) if total_all > 0 else 0
+        print("total_pct", total_pct)
+        # total_pct = total_severity_counts[group_name][warning_type] /  * 100
         
+        print("total_pct", total_pct)
         # Reverse order: Total first, then reversed components
         percentages_reversed = np.concatenate([[total_pct], percentages[::-1]])
         counts_reversed = np.concatenate([[total_count], counts[::-1]])
@@ -284,9 +309,15 @@ for group_name in groupnames:
                     color = 'black'
                 else:
                     color = 'white'
-                ax.text(x_pos, bar.get_y() + bar.get_height() / 2.4,
-                        f'{int(count)}', ha='center', va='center',
+                if i == 0:
+                    ax.text(x_pos, bar.get_y() + bar.get_height() / 2.4,
+                        f'{int(total_severity_counts[group_name][warning_type])}', ha='center', va='center',
                         color=color)
+                    print("total_severity_counts[group_name][warning_type]", total_severity_counts[group_name][warning_type])
+                else:
+                    ax.text(x_pos, bar.get_y() + bar.get_height() / 2.4,
+                            f'{int(count)}', ha='center', va='center',
+                            color=color)
         
         left += percentages_reversed
 
@@ -349,7 +380,7 @@ ax.set_xlim(0, 100)
 ax.set_xticks([])
 # ax.set_xticklabels(['0%', '20%', '40%', '60%', '80%', '100%'], fontsize=8)
 ax.tick_params(which='both', length=0.1)
-legend = ax.legend(legend_elements, legend_labels, loc='upper center', bbox_to_anchor=(0.44, -0.),
+legend = ax.legend(legend_elements, legend_labels, loc='upper center', bbox_to_anchor=(0.37, -0.),
            frameon=False, ncol=4, handlelength=0.9, columnspacing=1.3, handletextpad=-1, fontsize=9.5,
            labelspacing=0.1, borderpad=0.
            )
@@ -367,7 +398,7 @@ ax.grid(axis='x', alpha=0.3, linestyle='--')
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
-plt.tight_layout(pad = 0.1)
+plt.tight_layout(pad = 0.4)
 plt.savefig("consequence_bar_percentage.pdf", bbox_inches=0.0)
 plt.savefig("consequence_bar_percentage.png", dpi=300, bbox_inches=0.0)
 
