@@ -13,29 +13,29 @@ from util import get_components
 CONSEQUENCE_TO_GROUP_FUNC = {
     'Crash': 'Crash/Hang', 
     'lockup / hang': 'Crash/Hang', 
-    'Functionality (CFS bandwidth)': 'Interface Vio.',
-    'Functionality (Deadline enforce / admission control)': 'Interface Vio.',
-    'Functionality (Trace or account)': 'Trace Err.',
-    'Functionality (config / feature not enabled/disabled)': 'Config Vio.',
-    'Functionality (cpu allowed, or cpuiso)': 'Interface Vio.',
-    'Functionality (hotplug)': 'Hotplug Fail',
-    'Functionality (property change fail)': 'Interface Vio.',
-    'Functionality (response error)': 'Return Val Err.',
+    'Functionality (CFS bandwidth)': 'Sched Attr',
+    'Functionality (Deadline enforce / admission control)': 'Sched Attr',
+    'Functionality (Trace or account)': 'Trace',
+    'Functionality (config / feature not enabled/disabled)': 'Config',
+    'Functionality (cpu allowed, or cpuiso)': 'Sched Attr',
+    'Functionality (hotplug)': 'Hotplug',
+    'Functionality (property change fail)': 'Sched Attr',
+    'Functionality (response error)': 'Return Val',
     'Functionality (starvation)': 'Starvation',
-    'Functionality (task state change failure)': 'Task State Err.',
+    'Functionality (task state change failure)': 'Task State',
 }
 
 GROUP_TO_IDX_FUNC = {
     'Crash/Hang': 0,
     'Starvation': 1,
-    'Interface Vio.': 2,
+    'Sched Attr': 2,
     # 'CFS BW Vio.': 3,
-    'Config Vio.': 3,
+    'Config': 3,
     # 'Affinity Vio.': 5,
-    'Hotplug Fail': 4,
-    'Task State Err.': 5,
-    'Return Val Err.': 6,
-    'Trace Err.': 7,
+    'Hotplug': 4,
+    'Task State': 5,
+    'Return Val': 6,
+    'Trace': 7,
 }
 
 # Map consequence descriptions for policy
@@ -44,9 +44,9 @@ CONSEQUENCE_TO_GROUP_POLICY = {
     'Performance (Policy violation, balance, work conserving)': 'Balance',
     'Performance (Policy violation, cpufreq control)': 'Freq Ctrl',
     'Performance (Policy violation, fairness)': 'Fairness',
-    'Performance (Policy violation, impact from lower priority task)': 'Class Prio.',
+    'Performance (Policy violation, impact from lower priority task)': 'Class Prio',
     'Performance (Policy violation, locality)': 'Locality',
-    'Performance (energy efficiency, capacity fit)': 'Energy Eff.',
+    'Performance (energy efficiency, capacity fit)': 'Energy Eff',
 }
 
 GROUP_TO_IDX_POLICY = {
@@ -54,9 +54,9 @@ GROUP_TO_IDX_POLICY = {
     'Balance': 1,
     'Freq Ctrl': 2,
     'Fairness': 3,
-    'Class Prio.': 4,
+    'Class Prio': 4,
     'Locality': 5,
-    'Energy Eff.': 6,
+    'Energy Eff': 6,
 }
 
 ObservedWarnings = {
