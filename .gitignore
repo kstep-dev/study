@@ -4,4 +4,6 @@
 *.csv
 linux/
 linux_mt/
+*/__pycache__/*
 __pycache__/*
+*egg-info/*
