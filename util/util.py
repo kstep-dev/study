@@ -11,12 +11,12 @@ RESULT_DIR = PROJ_DIR / "result"
 DATA_FILE = PROJ_DIR / "data/bug_data.csv"
 
 LINUX_DIRs = [PROJ_DIR / "linux/master", 
-              PROJ_DIR / "linux/linux-v6.12.y",
-              PROJ_DIR / "linux/linux-v6.6.y",
-              PROJ_DIR / "linux/linux-v6.1.y",
-              PROJ_DIR / "linux/linux-v5.15.y",
-              PROJ_DIR / "linux/linux-v5.10.y",
-              PROJ_DIR / "linux/linux-v5.4.y"]
+              PROJ_DIR / "linux/linux-6.12.y",
+              PROJ_DIR / "linux/linux-6.6.y",
+              PROJ_DIR / "linux/linux-6.1.y",
+              PROJ_DIR / "linux/linux-5.15.y",
+              PROJ_DIR / "linux/linux-5.10.y",
+              PROJ_DIR / "linux/linux-5.4.y"]
 def system(cmd: str):
     logging.info(f"Running: {cmd}")
     subprocess.run(cmd, shell=True, check=True)
