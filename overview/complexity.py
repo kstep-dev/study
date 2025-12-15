@@ -6,14 +6,6 @@ import numpy as np
 from util import *
 from component_count import component_count
 
-def version_tuple(v):
-    # parse out v3.0 -> [3,0]
-    v = v.lstrip('v').split('-')[0].split('.')
-    return tuple(int(x) for x in v)
-
-def compare_versions(v1, v2):
-    return version_tuple(v1) <= version_tuple(v2)
-
 def get_versions(min_version="v3.3", max_version="v6.18", step = 5):
     # List all tags
     tag_lines = system_output(

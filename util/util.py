@@ -37,3 +37,11 @@ def get_date_diff(commit1, commit2):
 def get_year(commit):
     out = system_output(f"git -C {LINUX_MAINLINE_DIR} show -s --format=%ad --date=format:%Y {commit}")
     return out.strip()
+
+def version_tuple(v):
+    # parse out v3.0 -> [3,0]
+    v = v.lstrip('v').split('-')[0].split('.')
+    return tuple(int(x) for x in v)
+
+def compare_versions(v1, v2):
+    return version_tuple(v1) <= version_tuple(v2)
