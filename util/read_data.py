@@ -10,7 +10,7 @@ def parse_multi_value(x):
     for char in str(x):
         if char == '"':
             in_quotes = not in_quotes
-        elif char == ',' and not in_quotes:
+        elif (char == ',' or char == ';') and not in_quotes:
             if curr.strip():
                 parts.append(curr.strip().strip('"'))
             curr = ''
@@ -19,6 +19,12 @@ def parse_multi_value(x):
     if curr.strip():
         parts.append(curr.strip().strip('"'))
     return [p.strip() for p in parts if p.strip()]
+
+def parse_tree_version(version):
+    if version == "master":
+        return "master"
+    else:
+        return "v" + version[6:-2]
 
 def read_data():
     results = {}
@@ -33,6 +39,9 @@ def read_data():
             consequence = parse_multi_value(row["consequence"])
             visibility = row["visibility"]
             buggy_hash = row["buggy_sha"]
+            tree = row["tree"]
+            backport = row["backport"]
+            buggy_tag = row["buggy_tag"]
             results[hash] = {
                 "root_cause": root_cause, 
                 "trigger_condition": trigger_condition, 
@@ -40,7 +49,10 @@ def read_data():
                 "prevention": prevention, 
                 "consequence": consequence, 
                 "visibility": visibility,
-                "buggy_hash": buggy_hash
+                "buggy_hash": buggy_hash,
+                "tree": [parse_tree_version(v) for v in parse_multi_value(tree)],
+                "backport": [parse_tree_version(v) for v in parse_multi_value(backport)],
+                "buggy_tag": buggy_tag
             }
 
     return results

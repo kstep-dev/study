@@ -17,6 +17,17 @@ LINUX_DIRs = [PROJ_DIR / "linux/master",
               PROJ_DIR / "linux/linux-5.15.y",
               PROJ_DIR / "linux/linux-5.10.y",
               PROJ_DIR / "linux/linux-5.4.y"]
+
+LINUX_VERSIONS = [
+    "master",
+    "v6.12",
+    "v6.6",
+    "v6.1",
+    "v5.15",
+    "v5.10",
+    "v5.4"
+]
+
 def system(cmd: str):
     logging.info(f"Running: {cmd}")
     subprocess.run(cmd, shell=True, check=True)
@@ -40,13 +51,25 @@ def get_date_diff(commit1, commit2):
     return diff
 
 def get_year(commit):
-    out = system_output(f"git -C {LINUX_MAINLINE_DIR} show -s --format=%ad --date=format:%Y {commit}")
+    for LINUX_DIR in [LINUX_MAINLINE_DIR] + LINUX_DIRs:
+        try:
+            out = system_output(f"git -C {LINUX_DIR} show -s --format=%ad --date=format:%Y {commit}")
+            break
+        except subprocess.CalledProcessError:
+            continue
     return out.strip()
 
 def version_tuple(v):
     # parse out v3.0 -> [3,0]
+    if v == "master":
+        return (6, 18)
     v = v.lstrip('v').split('-')[0].split('.')
     return tuple(int(x) for x in v)
 
 def compare_versions(v1, v2):
-    return version_tuple(v1) <= version_tuple(v2)
+    if version_tuple(v1) < version_tuple(v2):
+        return -1
+    elif version_tuple(v1) > version_tuple(v2):
+        return 1
+    else:
+        return 0

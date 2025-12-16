@@ -25,7 +25,7 @@ def get_versions(min_version="v3.3", max_version="v6.18", step = 5):
 
 def count_loc(version):
     system(f"git -C {LINUX_MAINLINE_DIR} checkout -fq {version}")
-    if compare_versions(version, "v3.2"):
+    if compare_versions(version, "v3.2") <= 0:
         sched_dir = LINUX_MAINLINE_DIR / "kernel"
         sched_pattern = lambda fn: fn.startswith("sched") and fn.endswith(".c")
     else:
