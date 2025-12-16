@@ -55,11 +55,10 @@ def plot_stacked_bars(ax, sorted_group_warning_counts, sorted_group_names,
 
     # Add count labels
     for i in range(len(sorted_group_names)):
-        y = 0
         for j in range(len(warning_types)):
             count = sorted_group_warning_counts[i, j]
             if count > 5:
-                ax.text(i, y + count/2, str(count), ha='center', va='center', 
+                ax.text(i, count/2, str(count), ha='center', va='center', 
                        fontsize=9, color="white" if j==0 else "black")
     
 
