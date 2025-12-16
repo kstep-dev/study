@@ -45,7 +45,7 @@ def count_loc(version):
     return loc_result
 
 def plot_complexity(versions, loc_results, component_counts):
-    sorted_components = sorted(COMPONENT_SET, key=lambda x: COMPONENT_ORDER[x])
+    sorted_components = COMPONENT_SET
     component_colors = {
         "core": "#234C6A",
         "topology": "#AEDEFC",

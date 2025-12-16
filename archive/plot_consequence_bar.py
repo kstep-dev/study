@@ -38,7 +38,6 @@ CONSEQUENCE_TO_GROUP = {
     'No impact (duplicate call)': 'Policy. Benign',
     'No impact (self correcting)': 'Policy. Benign',
     'No impact (unnecessary check or warning)': 'Policy. Benign',
-    # 'compile failure': 'Build',
 }
 
 GROUP_TO_IDX = {
@@ -46,8 +45,6 @@ GROUP_TO_IDX = {
     'Func. Non-fatal': 1,
     'Policy. With Effect': 2,
     'Policy. Benign': 3,
-    # 'NoImpact': 3,
-    # 'Security': 4,
 }
 
 ObservedWarnings = {

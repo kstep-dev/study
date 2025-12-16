@@ -37,7 +37,9 @@ def read_data():
             discover = row["discover"]
             prevention = parse_multi_value(row["afterfix"])
             consequence = parse_multi_value(row["consequence"])
-            visibility = row["visibility"]
+            visibility = row["visibility"].lower()
+            if visibility == "none":
+                visibility = "silent"
             buggy_hash = row["buggy_sha"]
             tree = row["tree"]
             backport = row["backport"]

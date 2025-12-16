@@ -101,6 +101,7 @@ COMPONENT_ORDER = {
 }
 
 COMPONENT_SET = set(file_to_component.values()) - {"wait", "ext", "psi"}
+COMPONENT_SET = sorted(COMPONENT_SET, key=lambda x: COMPONENT_ORDER[x])
 
 def get_components(commit):
     out = None
