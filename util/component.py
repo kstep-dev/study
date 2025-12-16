@@ -36,14 +36,14 @@ file_to_component = {
     "smp.h": "topology",
 
     # Scheduler Framework: Account
-    "sched_stats.c": "accounting",
-    "sched_debug.c": "accounting",
-    "stats.c": "accounting",
-    "stats.h": "accounting",
-    "cputime.c": "accounting",
-    "cpuacct.c": "accounting",
-    "cpuacct.h": "accounting",
-    "debug.c": "accounting",
+    "sched_stats.c": "account",
+    "sched_debug.c": "account",
+    "stats.c": "account",
+    "stats.h": "account",
+    "cputime.c": "account",
+    "cpuacct.c": "account",
+    "cpuacct.h": "account",
+    "debug.c": "account",
 
     # Scheduling Policy: Fair
     "sched_fair.c": "fair",
@@ -94,7 +94,7 @@ file_to_component = {
 COMPONENT_ORDER = {
     "core": 0,
     "topology": 1,
-    "accounting": 2,
+    "account": 2,
     "fair": 3,
     "deadline": 4,
     "rt": 5,

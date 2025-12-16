@@ -39,7 +39,7 @@ ObservedWarnings = {
 COMPONENTS = [
     "core",
     "topology",
-    "accounting",
+    "account",
     "fair",
     "deadline",
     "rt",

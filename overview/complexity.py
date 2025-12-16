@@ -49,7 +49,7 @@ def plot_complexity(versions, loc_results, component_counts):
     component_colors = {
         "core": "#234C6A",
         "topology": "#AEDEFC",
-        "accounting": "#648DB3",
+        "account": "#648DB3",
         "fair": "#A72703",
         "deadline": "#FFE797",
         "rt": "#FCB53B",
@@ -60,7 +60,7 @@ def plot_complexity(versions, loc_results, component_counts):
         'fair': 's', 
         'topology': '^', 
         'deadline': 'v', 
-        'accounting': 'o', 
+        'account': 'o', 
         'rt': 'X'}
 
 
@@ -109,7 +109,7 @@ def plot_complexity(versions, loc_results, component_counts):
         'fair':   (0.00, -0.0),   
         'topology': (0.03, 0.03),  
         'deadline': (-0.012, 0.01), 
-        'accounting': (0.01, 0.01), 
+        'account': (0.01, 0.01), 
         'rt':    (-0.02,  0.0),
     }
     for i, comp in enumerate(sorted_components):

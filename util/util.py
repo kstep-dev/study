@@ -26,12 +26,17 @@ def system_output(cmd: str):
     return subprocess.check_output(cmd, shell=True, text=True)
 
 def get_date_diff(commit1, commit2):
-    date1 = system_output(f"git -C {LINUX_MAINLINE_DIR} show -s --format=%ci {commit1}").strip()
-    date2 = system_output(f"git -C {LINUX_MAINLINE_DIR} show -s --format=%ci {commit2}").strip()
+    for LINUX_DIR in [LINUX_MAINLINE_DIR] + LINUX_DIRs:
+        try:
+            date1 = system_output(f"git -C {LINUX_DIR} show -s --format=%ci {commit1}").strip()
+            date2 = system_output(f"git -C {LINUX_DIR} show -s --format=%ci {commit2}").strip()
+            break
+        except subprocess.CalledProcessError:
+            continue
 
     date1 = datetime.strptime(date1, "%Y-%m-%d %H:%M:%S %z")
     date2 = datetime.strptime(date2, "%Y-%m-%d %H:%M:%S %z")
-    diff = date2 - date1
+    diff = date1 - date2
     return diff
 
 def get_year(commit):

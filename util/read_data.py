@@ -32,13 +32,15 @@ def read_data():
             prevention = parse_multi_value(row["afterfix"])
             consequence = parse_multi_value(row["consequence"])
             visibility = row["visibility"]
+            buggy_hash = row["buggy_sha"]
             results[hash] = {
                 "root_cause": root_cause, 
                 "trigger_condition": trigger_condition, 
                 "discover": discover, 
                 "prevention": prevention, 
                 "consequence": consequence, 
-                "visibility": visibility
+                "visibility": visibility,
+                "buggy_hash": buggy_hash
             }
 
     return results

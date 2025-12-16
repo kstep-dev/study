@@ -22,7 +22,7 @@ diff_dict = {
     "core": [],
     # "clock": [],
     "topology": [],
-    "accounting": [],
+    "account": [],
     # "load est.": [],
     "fair": [],
     "rt": [],
@@ -53,7 +53,7 @@ with open(fixes_file, newline='', encoding="utf-8") as f:
 fig, axes = plt.subplots(1, 2, figsize=(4.5, 1.2), sharex=True, sharey=True)
 colors = plt.cm.tab20.colors
 
-foundation = ["core", "topology", "accounting"]
+foundation = ["core", "topology", "account"]
 policy = ["fair", "rt", "deadline"]
 
 ax0 = axes[0]
@@ -61,7 +61,7 @@ for idx, component in enumerate(foundation):
     data = sorted(diff_dict[component])
     if data:
         y_vals = [i / len(data) * 100 for i in range(len(data))]
-        ax0.plot(data, y_vals, label=component if component != "accounting" else "account", color=colors[idx])
+        ax0.plot(data, y_vals, label=component if component != "account" else "account", color=colors[idx])
 ax0.set_title("(a) Scheduler Framework", fontsize=9)
 ax0.set_xlim(1, 7000)
 ax0.set_ylim(0, 105)

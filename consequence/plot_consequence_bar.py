@@ -59,7 +59,7 @@ ObservedWarnings = {
 COMPONENTS = [
     "core",
     "topology",
-    "accounting",
+    "account",
     "fair",
     "deadline",
     "rt",
@@ -105,7 +105,7 @@ for h in commit_hashes:
             component_to_hash[COMPONENT_TO_IDX[comp]].append(h)
     else:
         for comp in components:
-            if comp == "accounting":
+            if comp == "account":
                 continue
             component_to_hash[COMPONENT_TO_IDX[comp]].append(h)
 
