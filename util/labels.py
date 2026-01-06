@@ -172,3 +172,37 @@ PREVENTION_ID_TO_LABELS = {
     4: "Comment",
     5: "Nothing",
 }
+
+# Map root cause labels to IDs (based on actual data in CSV)
+ROOTCAUSE_TO_GROUP = {
+    "semantic(incorrect update stats)": "State",
+    "semantic(maintain in-memory data structure wrong cfs tree list etc)": "State",
+    "semantic(incorrect logic implementation making decision  update attr managetimer etc)": "Logic",
+    "concurrency": "Concurrency",
+    "memory": "Memory",
+    "semantic(generic wrong type integer overflow etc)": "Generic",
+}
+
+GROUP_TO_IDX_ROOTCAUSE = {
+    "State": 0,
+    "Logic": 1,
+    "Generic": 2,
+    "Concurrency": 3,
+    "Memory": 4,
+}
+
+ROOTCAUSE_ID_TO_COLORS = {
+    0: ('#53629E', 'white'),
+    1: ('#87BAC3', 'black'),
+    2: ('#B45253', 'black'),
+    3: ('#FCB53B', 'black'),
+    4: ('#FFE797', 'black'),
+}
+
+ROOTCAUSE_ID_TO_LABELS = {
+    0: "State",
+    1: "Logic",
+    2: "Generic",
+    3: "Concurrency",
+    4: "Memory",
+}

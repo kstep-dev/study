@@ -1,6 +1,7 @@
 import numpy as np
 
 # Create a horizontal stacked bar chart showing percentage of each method under each observability group.
+# counts: a matrix in shape of (observability_groups, methods) methods can be manifest, prevention, root cause, etc.
 def plot_stacked_bar_percentage(ax, legend_ax, counts, colors, labels, y_labels, legend_args):
     # Prepare data: calculate percentages
     data = []
@@ -33,12 +34,11 @@ def plot_stacked_bar_percentage(ax, legend_ax, counts, colors, labels, y_labels,
                        color=colors[method_idx][1])
 
     # the plot settings for the bar chart
-    ax.invert_yaxis()
-    ax.tick_params(which='both', length=0.1)
-
     ax.set_ylim(bottom=-0.5, top = len(counts) - 0.5)
     ax.set_yticks(y)
     ax.set_yticklabels([y_labels[i] for i in y], rotation=0)
+    ax.invert_yaxis()
+    ax.tick_params(which='both', length=0.1)
 
     ax.set_xlim(0, 100)
     ax.set_xticks([])
