@@ -206,3 +206,35 @@ ROOTCAUSE_ID_TO_LABELS = {
     3: "Concurrency",
     4: "Memory",
 }
+
+# Map trigger conditions to group names
+TRIGGER_CONDITION_TO_GROUP = {
+    "Boot": "Kernel Event",
+    "Hotplug/Hotunplug": "Kernel Event",
+    "Kernel/driver Event": "Kernel Event",
+    "Kthread Behavior": "Kernel Event",
+    "Property change (per cgroup)": "User Event",
+    "Property change (per system)": "User Event",
+    "Property change (per thread)": "User Event",
+    "Special topology (asym cpu)": "Special Topology",
+    "Special topology (numa)": "Special Topology",
+    "Special topology (other)": "Special Topology",
+    "Special topology (uniprocessor noSMP)": "Special Topology",
+    "Thread Behavior": "Thread Event",
+    "multiple sched class": "User Event",
+    "special config": "Kernel Event",
+}
+
+GROUP_TO_IDX_TRIGGER_CONDITION = {
+    "Thread Event": 0,
+    "User Event": 1,
+    "Kernel Event": 2,
+    "Special Topology": 3,
+}
+
+TRIGGER_CONDITION_ID_TO_LABELS = {
+    0: "Workload Behavior",
+    1: "Sched Attribute",
+    2: "Kernel Event",
+    3: "CPU Attribute",
+}
