@@ -80,7 +80,7 @@ def plot_trigger_condition_data(sorted_combs, sorted_counts):
     for i in range(len(sorted_combs[0])):
         ax_matrix.axhline(i, color='lightgray', linestyle='--', alpha=0.5, zorder=0)
 
-    fig.savefig(RESULT_DIR / 'trigger_condition.pdf', bbox_inches='tight', pad_inches=0.01)
+    save_figure_variants(fig, "Fig12_trigger_condition", bbox_inches='tight', pad_inches=0.01)
 
 if __name__ == "__main__":
     sorted_combs, sorted_counts = collect_trigger_condition_data()

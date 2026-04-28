@@ -46,7 +46,7 @@ if __name__ == "__main__":
                                     'handlelength': 1.2, 'labelspacing': 0.5
                                 },
                                )
-    fig.savefig(RESULT_DIR / 'manifest_methods.pdf', bbox_inches='tight', pad_inches=0.0)
+    save_figure_variants(fig, "Fig9_manifest_methods", bbox_inches='tight', pad_inches=0.0)
 
     # Plot 2: Prevention Methods (after fix)
     fig = plt.figure(figsize=(4.5, 1.5))
@@ -67,4 +67,4 @@ if __name__ == "__main__":
                                     'labelspacing': 0.2, 'handlelength': 0.6}
                                 )
 
-    fig.savefig(RESULT_DIR / 'prevention_methods.pdf', bbox_inches='tight', pad_inches=0.0)
+    save_figure_variants(fig, "Fig10_prevention_methods", bbox_inches='tight', pad_inches=0.0)

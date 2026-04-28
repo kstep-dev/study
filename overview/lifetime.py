@@ -51,7 +51,7 @@ def plot_lifetime_data(lifetime_data):
                 fontsize=8)
 
     plt.tight_layout(pad=0.0, rect=[0, 0, 1, 0.98])
-    plt.savefig(RESULT_DIR / "lifetime.pdf")
+    save_figure_variants(fig, "Fig5_lifetime")
 
 
 if __name__ == "__main__":

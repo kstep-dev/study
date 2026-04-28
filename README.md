@@ -2,14 +2,18 @@
 
 Before running any analyses or generating figures, ensure the following steps are completed:
 
-1. Install the required Python dependencies:
+1. Install the required Python dependencies with `uv`:
    ```bash
-   pip install -e .
+   # Skip if uv has been installed
+   curl -LsSf https://astral.sh/uv/install.sh | sh 
+   source $HOME/.local/bin/env
+   uv sync
+   source .venv/bin/activate
    ```
 
 2. Set up the necessary directories for Linux paths:
    ```bash
-   python3 util/set_linux_dirs.py
+   python util/set_linux_dirs.py
    ```
 
 3. Create the `result` directory to store generated outputs:
@@ -23,48 +27,52 @@ Execute the following commands to reproduce the figures and tables presented in 
 
 - **Figure 4**  
   ```bash
-  python3 overview/complexity.py --mode count
-  python3 overview/complexity.py --mode plot
+  python overview/complexity.py --mode count
+  python overview/complexity.py --mode plot
   ```
 
 - **Table 1**  
   ```bash
-  python3 overview/component_count.py
+  python overview/component_count.py
   ```
 
 - **Figure 5**  
   ```bash
-  python3 overview/lifetime.py
+  python overview/lifetime.py
   ```
 
 - **Figure 6**  
   ```bash
-  python3 overview/backport.py
+  python overview/backport.py
   ```
 
 - **Figure 7**  
   ```bash
-  python3 consequence/observability.py
+  python consequence/observability.py
   ```
 
 - **Figure 8**  
   ```bash
-  python3 consequence/consequence.py
+  python consequence/consequence.py
   ```
 
 - **Figures 9 and 10**  
   ```bash
-  python3 testMethod/manifest_prevention.py
+  python testMethod/manifest_prevention.py
   ```
 
 - **Figure 11**  
   ```bash
-  python3 rootcause/root_cause.py
+  python rootcause/root_cause.py
   ```
 
 - **Figure 12**  
   ```bash
-  python3 trigger/trigger_condition.py
+  python trigger/trigger_condition.py
   ```
 
-All results, including plots and tables, will be saved in the `result` directory unless otherwise specified.
+The results are saved at ``~/project/study/result/``. You can download the plots to review them.
+
+```bash
+scp -r 'Tingjia@{ServerIP}:~/project/study/result/' /LOCAL/DIR
+```

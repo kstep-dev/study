@@ -162,7 +162,7 @@ def plot_complexity(versions, loc_results, component_counts):
                 )
     plt.subplots_adjust(left=0.06, right=0.98, top=0.88, bottom=0.4) 
 
-    fig.savefig(RESULT_DIR / "complexity.pdf")
+    save_figure_variants(fig, "Fig4_complexity")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -175,12 +175,21 @@ if __name__ == "__main__":
     versions = get_versions(args.min_version, args.max_version, args.step)
 
     if args.mode == "count":
+        print(
+            f"Counting scheduler LoC for {len(versions)} versions "
+            f"from {versions[0]} to {versions[-1]}..."
+        )
         loc_results = {}
-        for version in versions:
+        for index, version in enumerate(versions, start=1):
+            print(f"[{index}/{len(versions)}] Processing {version}...")
             loc_results[version] = count_loc(version)
+            total_loc = sum(loc_results[version].values())
+            print(f"[{index}/{len(versions)}] Finished {version}: {total_loc} lines")
 
+        print(f"Writing results to {RESULT_DIR / 'loc_results.json'}...")
         with open(RESULT_DIR / "loc_results.json", "w") as f:
             json.dump(loc_results, f)
+        print("Done.")
     
     else:
         with open(RESULT_DIR / "loc_results.json", "r") as f:
@@ -190,5 +199,3 @@ if __name__ == "__main__":
         component_counts = component_count()
         print(component_counts)
         plot_complexity(versions, loc_results, component_counts)
-
-

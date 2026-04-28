@@ -82,7 +82,7 @@ def plot_backport_matrix(backport_matrix):
     plt.xlim(origin_xlim[0], origin_xlim[1])
 
     plt.tight_layout(pad=0.3)
-    plt.savefig(RESULT_DIR / "backport_matrix.pdf", dpi = 1000)
+    save_figure_variants(plt.gcf(), "Fig6_backport_matrix", dpi=1000)
 
 if __name__ == "__main__":
     backport_matrix, years = collect_backport_data()

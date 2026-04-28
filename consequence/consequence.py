@@ -72,4 +72,4 @@ if __name__ == "__main__":
     sorted_group_warning_counts, sorted_group_names = collect_consequence_data(CONSEQUENCE_TO_GROUP_POLICY, GROUP_TO_IDX_POLICY)
     plot_stacked_bars(ax2, sorted_group_warning_counts, sorted_group_names, "(b) Policy Bugs", ["#BF092F", "#658C58", "#BBC863"])
     plt.tight_layout(pad=0.)
-    plt.savefig(RESULT_DIR / "consequence.pdf", bbox_inches='tight', pad_inches=0.01)
+    save_figure_variants(fig, "Fig8_consequence", bbox_inches='tight', pad_inches=0.01)

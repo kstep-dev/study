@@ -39,4 +39,4 @@ if __name__ == "__main__":
                                     'handlelength': 1, 'labelspacing': 0.2
                                 },
                                )
-    fig.savefig(RESULT_DIR / 'root_cause.pdf', bbox_inches='tight', pad_inches=0.0)
+    save_figure_variants(fig, "Fig11_root_cause", bbox_inches='tight', pad_inches=0.0)

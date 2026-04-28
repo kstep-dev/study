@@ -157,7 +157,7 @@ def plot_observability(observability_data, counts):
     
 
     plt.tight_layout(pad = 0.4)
-    plt.savefig(RESULT_DIR / "observability.pdf", bbox_inches=0.0)
+    save_figure_variants(fig, "Fig7_observability", bbox_inches=0.0)
 
 if __name__ == "__main__":
     observability_data, counts = collect_observability_data()

@@ -34,7 +34,15 @@ def system(cmd: str):
 
 def system_output(cmd: str):
     logging.info(f"Running: {cmd}")
-    return subprocess.check_output(cmd, shell=True, text=True)
+    result = subprocess.run(
+        cmd,
+        shell=True,
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    return result.stdout
 
 def get_date_diff(commit1, commit2):
     for LINUX_DIR in [LINUX_MAINLINE_DIR] + LINUX_DIRs:
@@ -73,3 +81,7 @@ def compare_versions(v1, v2):
         return 1
     else:
         return 0
+
+def save_figure_variants(fig, stem, **kwargs):
+    for suffix in ("png", "pdf"):
+        fig.savefig(RESULT_DIR / f"{stem}.{suffix}", **kwargs)

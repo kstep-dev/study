@@ -1,12 +1,7 @@
-*.pdf
-*.png
-*.json
+.venv/
+*__pycache__*
+*.egg-info
+
+result/
 linux/
 linux_mt/
-*/__pycache__/*
-__pycache__/*
-*egg-info/*
-venv/*
-dist/*
-build/*
-.DS_Store
