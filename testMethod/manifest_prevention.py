@@ -49,7 +49,7 @@ if __name__ == "__main__":
     save_figure_variants(fig, "Fig9_manifest_methods", bbox_inches='tight', pad_inches=0.0)
 
     # Plot 2: Prevention Methods (after fix)
-    fig = plt.figure(figsize=(4.5, 1.5))
+    fig = plt.figure(figsize=(4.5, 1.2))
     gs = gridspec.GridSpec(2, 1, height_ratios=[1, 0.01], hspace=0.5)
 
     ax1 = fig.add_subplot(gs[0, 0]) # Prevention Methods bar
