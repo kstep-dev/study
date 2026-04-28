@@ -22,8 +22,7 @@ Before running any analyses or generating figures, ensure the following steps ar
 
 1. Install the required Python dependencies with `uv`:
    ```bash
-   # Skip if uv has been installed
-   curl -LsSf https://astral.sh/uv/install.sh | sh 
+   curl -LsSf https://astral.sh/uv/install.sh | sh # Skip if uv has been installed 
    source $HOME/.local/bin/env
    uv sync
    source .venv/bin/activate
