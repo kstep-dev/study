@@ -1,3 +1,21 @@
+## Artifact of kernel scheduler bugs study
+This repository contains the source code for
+
+**kSTEP: Characterization and Controlled Testing of Linux CPU Scheduler Bugs (OSDI '26)**
+
+## Overview
+The instructions will reproduce the key results in Figure 4-12, and Table 1. The entire process can take around 10 minutes.
+
+## Environment
+
+We reserved three servers ([c220g5](https://docs.cloudlab.us/hardware.html#(part._cloudlab-wisconsin)) in Cloudlab), one for each reviewer. Please add your SSH public key to the [spreadsheet](https://docs.google.com/spreadsheets/d/1HB2LAww1IrGjMe0bNfvnsGPhwDcuICfwcPPICZBJEpE/edit?usp=sharing ) next to the IP address of the server you will use.
+
+Inside each server, you can access the bug study repo with
+
+```bash
+cd ~/project/study
+```
+
 ## Prerequisites
 
 Before running any analyses or generating figures, ensure the following steps are completed:
