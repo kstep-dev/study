@@ -91,5 +91,5 @@ Execute the following commands to reproduce the figures and tables presented in 
 The results are saved at ``~/project/study/result/``. You can download the plots to review them. Run the following command on your own PC:
 
 ```bash
-scp -r 'Tingjia@{ServerIP}:~/project/study/result/' /LOCAL/DIR
+scp -r '{Username}@{ServerIP}:~/project/study/result/' /LOCAL/DIR
 ```
